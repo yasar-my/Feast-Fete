@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.web.client.RestTemplate;
+
 @Service
 @RequiredArgsConstructor
 
@@ -26,6 +28,8 @@ public class PaymentServiceImpl
         implements PaymentService {
 
     private final RazorpayClient razorpayClient;
+
+    private final RestTemplate restTemplate;
 
     private final PaymentRepository paymentRepository;
 
@@ -147,6 +151,13 @@ public class PaymentServiceImpl
 
         payment.setPaymentStatus(status);
 
+        if(status.equals("SUCCESS")){
+
+            updateAdvancePaid(
+                    payment.getBookingId()
+            );
+        }
+
         Payment updatedPayment =
                 paymentRepository.save(payment);
 
@@ -198,5 +209,19 @@ public class PaymentServiceImpl
                 .currency(order.get("currency").toString())
                 .key(razorpayKey)
                 .build();
+    }
+
+    private void updateAdvancePaid(
+            Long bookingId
+    ) {
+
+        String url =
+                "http://localhost:8083/api/booking/advance-paid/"
+                        + bookingId;
+
+        restTemplate.put(
+                url,
+                null
+        );
     }
 }

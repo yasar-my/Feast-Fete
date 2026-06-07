@@ -11,6 +11,11 @@ import jakarta.validation.Valid;
 import java.util.List;
 
 import com.catringPlatFrom.booking_service.entity.Booking;
+import org.springframework.http.ResponseEntity;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/booking")
@@ -54,14 +59,13 @@ public class BookingController {
         return service.updateBookingStatus(id, status);
     }
 
-    @DeleteMapping("/{id}")
-    public String cancelBooking(
-            @PathVariable Long id
-    ) {
+    @PutMapping("/cancel/{id}")
+    public ResponseEntity<String> cancelBooking(
+            @PathVariable Long id) {
 
         service.cancelBooking(id);
 
-        return "Booking Cancelled Successfully";
+        return ResponseEntity.ok("Booking Cancelled");
     }
 
 
@@ -79,5 +83,46 @@ public class BookingController {
     ) {
 
         return service.confirmBooking(bookingId);
+    }
+    @PutMapping("/complete/{bookingId}")
+    public Booking completeBooking(
+            @PathVariable Long bookingId
+    ) {
+
+        return service.completeBooking(
+                bookingId
+        );
+    }
+
+    @PutMapping("/advance-paid/{bookingId}")
+    public Booking advancePaid(
+            @PathVariable Long bookingId
+    ) {
+
+        return service.advancePaid(
+                bookingId
+        );
+    }
+
+    @GetMapping("/invoice/{id}")
+    public ResponseEntity<byte[]> downloadInvoice(
+            @PathVariable Long id
+    ) {
+
+        byte[] pdf =
+                service.generateInvoice(id);
+
+        return ResponseEntity.ok()
+
+                .header(
+                        HttpHeaders.CONTENT_DISPOSITION,
+                        "attachment; filename=invoice.pdf"
+                )
+
+                .contentType(
+                        MediaType.APPLICATION_PDF
+                )
+
+                .body(pdf);
     }
 }

@@ -13,6 +13,9 @@ import CreateOrganizerProfile from "./pages/CreateOrganizerProfile";
 import EditOrganizerProfile from "./pages/EditOrganizerProfile";
 import OrganizerProfile from "./pages/OrganizerProfile";
 import CustomerProfile from "./pages/CustomerProfile";
+import BookingRequests from "./pages/BookingRequests";
+import AdminDashboard from "./pages/AdminDashboard";
+import AdminUsers from "./pages/AdminUsers";
 
 function App() {
 
@@ -64,6 +67,18 @@ function App() {
                 <Route
                     path="/organizer-profile"
                     element={<OrganizerProfile />}
+                />
+                <Route
+                    path="/booking-requests"
+                    element={<BookingRequests />}
+                />
+                <Route
+                    path="/admin/dashboard"
+                    element={<AdminDashboard />}
+                />
+                <Route
+                    path="/admin/users"
+                    element={<AdminUsers />}
                 />
 
             </Routes>

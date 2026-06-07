@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import logo from "../Images/logo.jpeg";
 
 const Navbar = () => {
 
@@ -53,28 +54,28 @@ const Navbar = () => {
 
                     <div
                         style={{
-                            width: "52px",
-                            height: "52px",
+                            width: "75px",
+                            height: "75px",
                             borderRadius: "50%",
-                            background: "rgba(212,175,55,0.08)",
-                            border: "1px solid rgba(212,175,55,0.25)",
+                            background: "#1a0a00",
+                            border: "2px solid #d4af37",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
-                            overflow: "hidden"
+                            overflow: "hidden",
+                            boxShadow: "0 0 15px rgba(212,175,55,0.4)"
                         }}
                     >
-
                         <img
-                            src="/logo.png"
+                            src={logo}
                             alt="logo"
                             style={{
-                                width: "38px",
-                                height: "38px",
-                                objectFit: "contain"
+                                width: "68px",
+                                height: "68px",
+                                objectFit: "cover",
+                                borderRadius: "50%"
                             }}
                         />
-
                     </div>
 
                     <h1
@@ -162,7 +163,7 @@ const Navbar = () => {
                                     role === "ORGANIZER" && (
 
                                         <Link
-                                            to="/organizer-bookings"
+                                            to="/booking-requests"
                                             style={linkStyle}
                                         >
                                             Booking Requests

@@ -27,6 +27,7 @@ public class OrganizerProfileServiceImpl
         OrganizerProfile organizer = new OrganizerProfile();
 
         organizer.setProfilePhoto(request.getProfilePhoto());
+        organizer.setFoodImages(request.getFoodImages());
         organizer.setServiceName(request.getServiceName());
         organizer.setName(request.getName());
         organizer.setLocation(request.getLocation());
@@ -46,6 +47,7 @@ public class OrganizerProfileServiceImpl
 
         response.setId(saved.getId());
         response.setProfilePhoto(saved.getProfilePhoto());
+        response.setFoodImages(saved.getFoodImages());
         response.setServiceName(saved.getServiceName());
         response.setName(saved.getName());
         response.setLocation(saved.getLocation());
@@ -96,6 +98,7 @@ public class OrganizerProfileServiceImpl
                         ));
 
         profile.setProfilePhoto(request.getProfilePhoto());
+        profile.setFoodImages(request.getFoodImages());
         profile.setServiceName(request.getServiceName());
         profile.setName(request.getName());
         profile.setLocation(request.getLocation());
@@ -124,6 +127,7 @@ public class OrganizerProfileServiceImpl
         return OrganizerProfileResponseDTO.builder()
                 .id(profile.getId())
                 .profilePhoto(profile.getProfilePhoto())
+                .foodImages(profile.getFoodImages())
                 .serviceName(profile.getServiceName())
                 .name(profile.getName())
                 .location(profile.getLocation())

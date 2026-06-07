@@ -17,6 +17,121 @@ const Dashboard = () => {
 
     const [error, setError] = useState("");
 
+    const [foodImages, setFoodImages] = useState([]);
+
+    const [selectedImage, setSelectedImage] =
+    useState(null);
+
+
+    const handleFoodImages = (e) => {
+
+        setFoodImages(
+            Array.from(e.target.files)
+        );
+    };
+
+
+    const uploadFoodImages = async () => {
+
+        const urls = [];
+
+        for (const file of foodImages) {
+
+            const data = new FormData();
+
+            data.append("file", file);
+
+            data.append(
+                "upload_preset",
+                "feast_fete_upload"
+            );
+
+            const response = await fetch(
+                "https://api.cloudinary.com/v1_1/dmytd1bjy/image/upload",
+                {
+                    method: "POST",
+                    body: data
+                }
+            );
+
+            const result =
+                await response.json();
+
+            urls.push(result.secure_url);
+        }
+
+        const existingImages =
+            profile.foodImages
+                ? profile.foodImages.split(",")
+                : [];
+
+        const updatedProfile = {
+
+            ...profile,
+
+            foodImages: [
+                ...existingImages,
+                ...urls
+            ].join(",")
+        };
+
+        setProfile(updatedProfile);
+
+        await fetch(
+            `http://localhost:8082/api/organizer/${profile.id}`,
+            {
+                method: "PUT",
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+                body: JSON.stringify(
+                    updatedProfile
+                )
+            }
+        );
+
+        console.log(updatedProfile);
+    };
+
+
+    const deleteImage = async (index) => {
+
+        const images =
+            profile.foodImages.split(",");
+
+        const updatedImages =
+            images.filter(
+                (_, i) => i !== index
+            );
+
+        const updatedProfile = {
+
+            ...profile,
+
+            foodImages:
+                updatedImages.join(",")
+        };
+
+        setProfile(updatedProfile);
+
+        await fetch(
+            `http://localhost:8082/api/organizer/${profile.id}`,
+            {
+                method: "PUT",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify(
+                    updatedProfile
+                )
+            }
+        );
+    };
+
     useEffect(() => {
 
         // ONLY ORGANIZER
@@ -169,9 +284,8 @@ const Dashboard = () => {
 
                         <img
                             src={
-                                profile.profilePhoto
-                                    ? `/images/${profile.profilePhoto}`
-                                    : "https://cdn-icons-png.flaticon.com/512/149/149071.png"
+                                profile.profilePhoto ||
+                                "https://cdn-icons-png.flaticon.com/512/149/149071.png"
                             }
                             alt="profile"
                             style={{
@@ -179,8 +293,7 @@ const Dashboard = () => {
                                 height: "180px",
                                 borderRadius: "50%",
                                 objectFit: "cover",
-                                border:
-                                    "5px solid #2b1408"
+                                border: "5px solid #2b1408"
                             }}
                         />
 
@@ -292,6 +405,135 @@ const Dashboard = () => {
                         </button>
 
                     </div>
+
+                    <input
+                            type="file"
+                            multiple
+                            accept="image/*"
+                            onChange={handleFoodImages}
+                        />
+
+                        <button
+                            onClick={uploadFoodImages}
+                            style={buttonStyle}
+                        >
+                            Add Images
+                        </button>
+
+                        {
+                            profile.foodImages && (
+
+                                <div
+                                    style={{
+                                        marginTop: "30px"
+                                    }}
+                                >
+                                    <h2>Food Gallery</h2>
+
+                                    <div
+                                        style={{
+                                            display: "grid",
+                                            gridTemplateColumns:
+                                                "repeat(auto-fill,minmax(180px,1fr))",
+                                            gap: "15px",
+                                            marginTop: "15px"
+                                        }}
+                                    >
+
+                                        {
+                                            profile.foodImages
+                                                .split(",")
+                                                .map((img, index) => (
+
+                                                    <div
+                                                        key={index}
+                                                        style={{
+                                                            position: "relative"
+                                                        }}
+                                                    >
+
+                                                        <img
+                                                            src={img}
+                                                            alt="food"
+                                                            onClick={() =>
+                                                                setSelectedImage(img)
+                                                            }
+                                                            style={{
+                                                                width: "100%",
+                                                                height: "180px",
+                                                                objectFit: "cover",
+                                                                borderRadius: "12px",
+                                                                cursor: "pointer"
+                                                            }}
+                                                        />
+
+                                                        <button
+                                                            onClick={() =>
+                                                                deleteImage(index)
+                                                            }
+                                                            style={{
+                                                                position: "absolute",
+                                                                top: "8px",
+                                                                right: "8px",
+                                                                background: "red",
+                                                                color: "white",
+                                                                border: "none",
+                                                                borderRadius: "50%",
+                                                                width: "30px",
+                                                                height: "30px",
+                                                                cursor: "pointer"
+                                                            }}
+                                                        >
+                                                            X
+                                                        </button>
+
+                                                    </div>
+
+                                                ))
+                                        }
+
+                                        {
+                                            selectedImage && (
+
+                                                <div
+                                                    onClick={() =>
+                                                        setSelectedImage(null)
+                                                    }
+                                                    style={{
+                                                        position: "fixed",
+                                                        top: 0,
+                                                        left: 0,
+                                                        width: "100%",
+                                                        height: "100%",
+                                                        background:
+                                                            "rgba(0,0,0,0.8)",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        zIndex: 9999
+                                                    }}
+                                                >
+
+                                                    <img
+                                                        src={selectedImage}
+                                                        alt="preview"
+                                                        style={{
+                                                            maxWidth: "80%",
+                                                            maxHeight: "80%",
+                                                            borderRadius: "20px"
+                                                        }}
+                                                    />
+
+                                                </div>
+
+                                            )
+                                        }
+
+                                    </div>
+
+                                </div>
+                            )
+                        }
 
                 </div>
 

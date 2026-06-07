@@ -13,6 +13,8 @@ const OrganizerDetails = () => {
 
     const [showBooking, setShowBooking] = useState(false);
 
+    const [selectedImage, setSelectedImage] = useState(null);
+
     const [bookingData, setBookingData] = useState({
 
         customerName: "",
@@ -227,20 +229,28 @@ const OrganizerDetails = () => {
             >
 
                 {/* IMAGE */}
-                <img
-                    src={
-                        organizer.profilePhoto ||
-                        "https://images.unsplash.com/photo-1555244162-803834f70033"
-                    }
-                    alt={organizer.name}
+                <div
                     style={{
-                        width: "100%",
-                        maxHeight: "450px",
-                        objectFit: "cover",
-                        borderRadius: "24px",
-                        marginBottom: "40px"
+                        display: "flex",
+                        justifyContent: "center",
+                        padding: "25px"
                     }}
-                />
+                >
+                    <img
+                        src={
+                            organizer.profilePhoto ||
+                            "https://images.unsplash.com/photo-1555244162-803834f70033"
+                        }
+                        alt={organizer.name}
+                        style={{
+                            width: "170px",
+                            height: "170px",
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            border: "5px solid #2b1408"
+                        }}
+                    />
+                </div>
 
                 {/* CONTENT */}
                 <div
@@ -374,6 +384,63 @@ const OrganizerDetails = () => {
                         </p>
 
                     </div>
+
+                    {/* FOOD GALLERY */}
+
+                    {
+                        organizer.foodImages && (
+
+                            <div
+                                style={{
+                                    marginTop: "40px"
+                                }}
+                            >
+
+                                <h2
+                                    style={{
+                                        marginBottom: "20px",
+                                        color: "#2b1408"
+                                    }}
+                                >
+                                    Food Gallery
+                                </h2>
+
+                                <div
+                                    style={{
+                                        display: "grid",
+                                        gridTemplateColumns:
+                                            "repeat(auto-fit,minmax(220px,1fr))",
+                                        gap: "20px"
+                                    }}
+                                >
+
+                                    {
+                                        organizer.foodImages
+                                            .split(",")
+                                            .map((img, index) => (
+
+                                                <img
+                                                    src={img}
+                                                    alt="food"
+                                                    onClick={() => setSelectedImage(img)}
+                                                    style={{
+                                                        width: "100%",
+                                                        height: "250px",
+                                                        objectFit: "cover",
+                                                        borderRadius: "15px",
+                                                        cursor: "pointer"
+                                                    }}
+                                                />
+
+                                            ))
+                                    }
+                                    
+
+                                </div>
+
+                            </div>
+                        )
+                    }
 
                 </div>
 
@@ -520,7 +587,66 @@ const OrganizerDetails = () => {
                     </div>
                 )
             }
+            {
+    selectedImage && (
+
+        <div
+            onClick={() =>
+                setSelectedImage(null)
+            }
+            style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                background:
+                    "rgba(0,0,0,0.9)",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 9999
+            }}
+        >
+
+            <img
+                src={selectedImage}
+                alt="preview"
+                onClick={(e) =>
+                    e.stopPropagation()
+                }
+                style={{
+                    maxWidth: "90%",
+                    maxHeight: "90%",
+                    objectFit: "contain",
+                    borderRadius: "10px"
+                }}
+            />
+
+            <button
+                onClick={() =>
+                    setSelectedImage(null)
+                }
+                style={{
+                    position: "absolute",
+                    top: "20px",
+                    right: "20px",
+                    fontSize: "30px",
+                    background: "none",
+                    border: "none",
+                    color: "#fff",
+                    cursor: "pointer"
+                }}
+            >
+                ✕
+            </button>
+
+        </div>
+    )
+}
         </>
+
+        
     );
 };
 

@@ -34,4 +34,11 @@ public interface BookingService {
     Booking confirmBooking(
             Long bookingId
     );
+    Booking completeBooking(
+            Long bookingId
+    );
+    Booking advancePaid(
+            Long bookingId
+    );
+    byte[] generateInvoice(Long bookingId);
 }

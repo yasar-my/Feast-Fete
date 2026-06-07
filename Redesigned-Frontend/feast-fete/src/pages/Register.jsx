@@ -24,125 +24,82 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
+
+    try {
 
         setLoading(true);
 
-        try {
+        const response = await fetch(
+            "http://localhost:8081/api/auth/register",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            }
+        );
 
-            const response = await fetch(
-                "http://localhost:8081/api/auth/register",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify(formData)
-                }
+        if (!response.ok) {
+
+            throw new Error("Registration Failed");
+        }
+
+        const result = await response.json();
+
+        console.log(
+            "REGISTER RESPONSE =",
+            result
+        );
+
+        const userData =
+            result.data || result;
+
+        const token =
+            userData.accessToken || "";
+
+        const role =
+            userData.role || formData.role;
+
+        const email =
+            userData.email || formData.email;
+
+        const name =
+            userData.name || formData.name;
+
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        localStorage.setItem("email", email);
+        localStorage.setItem("name", name);
+
+        console.log("TOKEN =", token);
+        console.log("ROLE =", role);
+        console.log("EMAIL =", email);
+        console.log("NAME =", name);
+
+        if (role === "ORGANIZER") {
+
+            navigate(
+                "/create-organizer-profile"
             );
 
-            if (!response.ok) {
+        } else {
 
-                throw new Error("Registration Failed");
-            }
-
-            const data = await response.json();
-
-            console.log("FULL REGISTER RESPONSE =", data);
-
-            /*
-                IMPORTANT FIX
-                =====================
-
-                YOUR BACKEND RESPONSE MAY LOOK LIKE:
-
-                {
-                    accessToken:"",
-                    role:"ORGANIZER",
-                    email:""
-                }
-
-                OR
-
-                {
-                    data:{
-                        accessToken:"",
-                        role:"ORGANIZER"
-                    }
-                }
-
-                SO HANDLE BOTH
-            */
-
-            let token = "";
-            let role = "";
-            let email = "";
-            let name = "";
-
-            // CASE 1
-            if (data.data) {
-
-                token = data.data.accessToken;
-                role = data.data.role;
-                email = data.data.email;
-                name = data.data.name;
-            }
-
-            // CASE 2
-            else {
-
-                token = data.accessToken;
-                role = data.role;
-                email = data.email;
-                name = data.name;
-            }
-
-            console.log("TOKEN =", token);
-            console.log("ROLE =", role);
-            console.log("EMAIL =", email);
-
-            // SAVE
-            localStorage.setItem("token", token || "");
-            localStorage.setItem("role", role || "");
-            localStorage.setItem("email", email || "");
-            localStorage.setItem("name", name || "");
-
-            /*
-                FORCE SAVE FORM ROLE
-                BACKEND ROLE EMPTY AANA
-            */
-
-            if (!role) {
-
-                localStorage.setItem(
-                    "role",
-                    formData.role
-                );
-
-                role = formData.role;
-            }
-
-            // REDIRECT
-            if (role === "ORGANIZER") {
-
-                navigate("/create-organizer-profile");
-
-            } else {
-
-                navigate("/organizers");
-            }
-
-        } catch (error) {
-
-            console.log(error);
-
-            alert("Registration Failed");
-
-        } finally {
-
-            setLoading(false);
+            navigate("/organizers");
         }
-    };
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert("Registration Failed");
+
+    } finally {
+
+        setLoading(false);
+    }
+};
 
     return (
 

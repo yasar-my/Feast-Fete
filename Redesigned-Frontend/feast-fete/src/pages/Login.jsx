@@ -25,59 +25,65 @@ const Login = () => {
 
     const handleSubmit = async (e) => {
 
-        e.preventDefault();
+    e.preventDefault();
 
-        try {
+    try {
 
-            setLoading(true);
+        setLoading(true);
 
-            const response =
-                await loginUser(formData);
+        const response = await loginUser(formData);
 
-            console.log(response.data);
+        console.log("LOGIN RESPONSE =", response.data);
 
-            // SAVE TOKEN
-            localStorage.setItem(
-                "token",
-                response.data.data.accessToken
-            );
+        const userData =
+            response.data.data || response.data;
 
-            // SAVE ROLE
-            localStorage.setItem(
-                "role",
-                response.data.data.role
-            );
+        const token =
+            userData.accessToken || "";
 
-            // SAVE EMAIL
-            localStorage.setItem(
-                "email",
-                response.data.data.email
-            );
+        const role =
+            userData.role || "";
 
-            const role =
-                response.data.data.role;
+        const email =
+            userData.email || formData.email;
 
-            // ROLE BASED NAVIGATION
-            if (role === "ORGANIZER") {
+        const name =
+            userData.name || "";
 
-                navigate("/dashboard");
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", role);
+        localStorage.setItem("email", email);
+        localStorage.setItem("name", name);
 
-            } else {
+        console.log("TOKEN =", token);
+        console.log("ROLE =", role);
+        console.log("EMAIL =", email);
+        console.log("NAME =", name);
 
-                navigate("/organizers");
-            }
+        if (role === "ORGANIZER") {
 
-        } catch (error) {
+            navigate("/dashboard");
 
-            console.log(error);
-
-            alert("Invalid Credentials");
-
-        } finally {
-
-            setLoading(false);
         }
-    };
+        else if(role === "ADMIN"){
+            navigate("/admin/dashboard")
+        }
+        else {
+
+            navigate("/organizers");
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+        alert("Invalid Credentials");
+
+    } finally {
+
+        setLoading(false);
+    }
+};
 
     return (
 

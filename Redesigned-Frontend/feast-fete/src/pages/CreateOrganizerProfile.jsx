@@ -51,21 +51,64 @@ const CreateOrganizerProfile = () => {
     };
 
     // IMAGE CHANGE
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
 
         const file = e.target.files[0];
 
         if (!file) return;
 
-        const previewUrl = URL.createObjectURL(file);
+        const previewUrl =
+            URL.createObjectURL(file);
 
         setPreview(previewUrl);
 
-        // FILE NAME SAVE
-        setFormData({
-            ...formData,
-            profilePhoto: file.name
-        });
+        try {
+
+            const imageUrl =
+                await uploadImageToCloudinary(file);
+
+            console.log(
+                "Cloudinary URL =",
+                imageUrl
+            );
+
+            setFormData(prev => ({
+                ...prev,
+                profilePhoto: imageUrl
+            }));
+
+        } catch (error) {
+
+            console.log(error);
+
+            alert(
+                "Image Upload Failed"
+            );
+        }
+    };
+
+    const uploadImageToCloudinary = async (file) => {
+
+        const data = new FormData();
+
+        data.append("file", file);
+
+        data.append(
+            "upload_preset",
+            "feast_fete_upload"
+        );
+
+        const response = await fetch(
+            "https://api.cloudinary.com/v1_1/dmytd1bjy/image/upload",
+            {
+                method: "POST",
+                body: data
+            }
+        );
+
+        const result = await response.json();
+
+        return result.secure_url;
     };
 
     // SUBMIT

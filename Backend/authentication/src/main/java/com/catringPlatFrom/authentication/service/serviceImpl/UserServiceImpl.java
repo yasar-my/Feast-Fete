@@ -50,13 +50,26 @@ public class UserServiceImpl implements UserService {
             );
         }
 
+
+        // ADMIN register block
+        if (request.getRole().equals("ADMIN")) {
+
+            throw new RuntimeException(
+                    "Admin registration not allowed"
+            );
+        }
+
         User user = User.builder()
 
                 .name(request.getName())
 
                 .email(request.getEmail())
 
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(
+                        passwordEncoder.encode(
+                                request.getPassword()
+                        )
+                )
 
                 .role(request.getRole())
 

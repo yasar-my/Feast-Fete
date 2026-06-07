@@ -41,4 +41,8 @@ public class OrganizerProfile {
     private String menu;
 
     private Integer plateRate;
+
+    @Column(name = "food_images",
+            length = 10000)
+    private String foodImages;
 }

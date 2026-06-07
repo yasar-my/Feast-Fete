@@ -48,4 +48,7 @@ public class Booking {
 
     private LocalDateTime createdAt;
 
+    @Column(name = "advance_paid")
+    private Boolean advancePaid = false;
+
 }

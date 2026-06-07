@@ -37,4 +37,6 @@ public class BookingResponseDTO {
     private Integer advanceAmount;
 
     private String bookingStatus;
+
+    private Boolean advancePaid;
 }

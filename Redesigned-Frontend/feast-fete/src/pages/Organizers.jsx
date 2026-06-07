@@ -187,18 +187,28 @@ const Organizers = () => {
                         >
 
                             {/* IMAGE */}
-                            <img
-                                src={
-                                    organizer.profilePhoto ||
-                                    "https://images.unsplash.com/photo-1555244162-803834f70033"
-                                }
-                                alt={organizer.name}
+                            <div
                                 style={{
-                                    width: "100%",
-                                    height: "260px",
-                                    objectFit: "cover"
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    padding: "25px"
                                 }}
-                            />
+                            >
+                                <img
+                                    src={
+                                        organizer.profilePhoto ||
+                                        "https://images.unsplash.com/photo-1555244162-803834f70033"
+                                    }
+                                    alt={organizer.name}
+                                    style={{
+                                        width: "170px",
+                                        height: "170px",
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                        border: "5px solid #2b1408"
+                                    }}
+                                />
+                            </div>
 
                             {/* CONTENT */}
                             <div
