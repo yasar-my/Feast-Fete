@@ -13,7 +13,7 @@ const AdminDashboard = () => {
         const token = localStorage.getItem("token");
 
         axios.get(
-            "http://localhost:8081/api/admin/stats",
+            "https://feast-fete.onrender.com/api/admin/stats",
             {
                 headers: {
                     Authorization: `Bearer ${token}`

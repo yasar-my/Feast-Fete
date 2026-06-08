@@ -45,7 +45,7 @@ const OrganizerDetails = () => {
         }
 
         fetch(
-            `http://localhost:8082/api/organizer/${encodeURIComponent(email)}`
+            `https://feast-fete-1.onrender.com/api/organizer/${encodeURIComponent(email)}`
         )
 
             .then((res) => {
@@ -96,7 +96,7 @@ const OrganizerDetails = () => {
         try {
 
             const response = await fetch(
-                "http://localhost:8083/api/booking/create",
+                "https://feast-fete-2.onrender.com/api/booking/create",
                 {
                     method: "POST",
 

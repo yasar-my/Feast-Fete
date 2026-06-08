@@ -28,7 +28,7 @@ const EditOrganizerProfile = () => {
     // FETCH PROFILE
     useEffect(() => {
 
-        fetch(`http://localhost:8082/api/organizer/${email}`)
+        fetch(`https://feast-fete-1.onrender.com/api/organizer/${email}`)
             .then((res) => res.json())
             .then((data) => {
 
@@ -128,7 +128,7 @@ const EditOrganizerProfile = () => {
         try {
 
             const response = await fetch(
-                `http://localhost:8082/api/organizer/${profileId}`,
+                `https://feast-fete-1.onrender.com/api/organizer/${profileId}`,
                 {
                     method: "PUT",
 

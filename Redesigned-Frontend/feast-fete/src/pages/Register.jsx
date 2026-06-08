@@ -31,7 +31,7 @@ const Register = () => {
         setLoading(true);
 
         const response = await fetch(
-            "http://localhost:8081/api/auth/register",
+            "https://feast-fete.onrender.com/api/auth/register",
             {
                 method: "POST",
                 headers: {

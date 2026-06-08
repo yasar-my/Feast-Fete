@@ -28,7 +28,7 @@ const OrganizerProfile = () => {
 
         // FETCH PROFILE
         fetch(
-            `http://localhost:8082/api/organizer/${email}`
+            `https://feast-fete-1.onrender.com/api/organizer/${email}`
         )
             .then(async (res) => {
 

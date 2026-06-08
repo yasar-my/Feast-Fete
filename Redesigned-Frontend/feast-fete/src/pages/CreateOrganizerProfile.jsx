@@ -172,7 +172,7 @@ const CreateOrganizerProfile = () => {
             );
 
             const response = await fetch(
-                "http://localhost:8082/api/organizer/create",
+                "https://feast-fete-1.onrender.com/api/organizer/create",
                 {
                     method: "POST",
 

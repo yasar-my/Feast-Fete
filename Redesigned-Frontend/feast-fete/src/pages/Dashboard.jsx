@@ -78,7 +78,7 @@ const Dashboard = () => {
         setProfile(updatedProfile);
 
         await fetch(
-            `http://localhost:8082/api/organizer/${profile.id}`,
+            `https://feast-fete-1.onrender.com/api/organizer/${profile.id}`,
             {
                 method: "PUT",
                 headers: {
@@ -116,7 +116,7 @@ const Dashboard = () => {
         setProfile(updatedProfile);
 
         await fetch(
-            `http://localhost:8082/api/organizer/${profile.id}`,
+            `https://feast-fete-1.onrender.com/api/organizer/${profile.id}`,
             {
                 method: "PUT",
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
         if (role === "ORGANIZER") {
 
             fetch(
-                `http://localhost:8082/api/organizer/${email}`
+                `https://feast-fete-1.onrender.com/api/organizer/${email}`
             )
                 .then(async (res) => {
 

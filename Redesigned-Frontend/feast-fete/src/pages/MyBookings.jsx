@@ -27,7 +27,7 @@ const MyBookings = () => {
     try {
 
         await fetch(
-            `http://localhost:8083/api/booking/complete/${bookingId}`,
+            `https://feast-fete-2.onrender.com/api/booking/complete/${bookingId}`,
             {
                 method: "PUT"
             }
@@ -60,7 +60,7 @@ const MyBookings = () => {
     try {
 
         const response = await axios.post(
-            "http://localhost:8084/api/payment/create-order",
+            "https://feast-fete-3.onrender.com/api/payment/create-order",
             {
                 bookingId: booking.id,
                 customerEmail: booking.customerEmail,
@@ -82,7 +82,7 @@ const MyBookings = () => {
             handler: async function () {
 
                 await fetch(
-                    `http://localhost:8083/api/booking/advance-paid/${booking.id}`,
+                    `https://feast-fete-2.onrender.com/api/booking/advance-paid/${booking.id}`,
                     {
                         method: "PUT"
                     }
@@ -109,7 +109,7 @@ const MyBookings = () => {
     const downloadInvoice = (bookingId) => {
 
         window.open(
-            `http://localhost:8083/api/booking/invoice/${bookingId}`,
+            `https://feast-fete-2.onrender.com/api/booking/invoice/${bookingId}`,
             "_blank"
         );
     };
@@ -118,7 +118,7 @@ const handleCancelBooking = async (bookingId) => {
     try {
 
         await fetch(
-            `http://localhost:8083/api/booking/cancel/${bookingId}`,
+            `https://feast-fete-2.onrender.com/api/booking/cancel/${bookingId}`,
             {
                 method: "PUT"
             }
@@ -144,7 +144,7 @@ const handleCancelBooking = async (bookingId) => {
     useEffect(() => {
 
         fetch(
-            `http://localhost:8083/api/booking/customer/${customerEmail}`
+            `https://feast-fete-2.onrender.com/api/booking/customer/${customerEmail}`
         )
 
             .then((res) => {

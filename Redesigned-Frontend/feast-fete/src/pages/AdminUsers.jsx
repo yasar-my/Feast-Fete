@@ -20,7 +20,7 @@ const AdminUsers = () => {
             localStorage.getItem("token");
 
         axios.get(
-            "http://localhost:8081/api/admin/users",
+            "https://feast-fete.onrender.com/api/admin/users",
             {
                 headers: {
                     Authorization:
@@ -47,7 +47,7 @@ const AdminUsers = () => {
             localStorage.getItem("token");
 
         await axios.delete(
-            `http://localhost:8081/api/admin/user/${id}`,
+            `https://feast-fete.onrender.com/api/admin/user/${id}`,
             {
                 headers: {
                     Authorization:

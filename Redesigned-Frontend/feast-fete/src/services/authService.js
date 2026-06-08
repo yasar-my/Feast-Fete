@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:8081/api/auth";
+const BASE_URL = "https://feast-fete.onrender.com/api/auth";
 
 export const loginUser = async (data) => {
 

@@ -11,7 +11,7 @@ const BookingRequests = () => {
     useEffect(() => {
 
         fetch(
-            `http://localhost:8083/api/booking/organizer/${organizerEmail}`
+            `https://feast-fete-2.onrender.com/api/booking/organizer/${organizerEmail}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -35,7 +35,7 @@ const BookingRequests = () => {
         try {
 
             await fetch(
-                `http://localhost:8083/api/booking/confirm/${id}`,
+                `https://feast-fete-2.onrender.com/api/booking/confirm/${id}`,
                 {
                     method: "PUT"
                 }
@@ -65,7 +65,7 @@ const BookingRequests = () => {
     try {
 
         await fetch(
-            `http://localhost:8083/api/booking/cancel/${id}`,
+            `https://feast-fete-2.onrender.com/api/booking/cancel/${id}`,
             {
                 method: "PUT"
             }

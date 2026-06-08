@@ -110,7 +110,7 @@ const CustomerProfile = () => {
             setLoading(true);
 
             const response = await fetch(
-                "http://localhost:8082/api/customer/create",
+                "https://feast-fete-1.onrender.com/api/customer/create",
                 {
                     method: "POST",
 

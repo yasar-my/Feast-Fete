@@ -11,7 +11,7 @@ const Organizers = () => {
 
     useEffect(() => {
 
-        fetch("http://localhost:8082/api/organizer/all")
+        fetch("https://feast-fete-1.onrender.com/api/organizer/all")
 
             .then((res) => {
 
