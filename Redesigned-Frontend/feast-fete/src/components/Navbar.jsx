@@ -139,7 +139,11 @@ const Navbar = () => {
                         role && (
                             <>
                                 <Link
-                                    to="/dashboard"
+                                    to={
+                                        role === "ADMIN"
+                                            ? "/admin/dashboard"
+                                            : "/dashboard"
+                                    }
                                     style={linkStyle}
                                 >
                                     Dashboard
@@ -290,7 +294,11 @@ const Navbar = () => {
                             role && (
                                 <>
                                     <Link
-                                        to="/dashboard"
+                                        to={
+                                            role === "ADMIN"
+                                                ? "/admin/dashboard"
+                                                : "/dashboard"
+                                        }
                                         style={mobileLink}
                                     >
                                         Dashboard
