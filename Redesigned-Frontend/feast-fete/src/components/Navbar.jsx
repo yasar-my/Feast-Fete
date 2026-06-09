@@ -320,7 +320,7 @@ const Navbar = () => {
                                         role === "ORGANIZER" && (
 
                                             <Link
-                                                to="/organizer-bookings"
+                                                to="/booking-requests"
                                                 style={mobileLink}
                                             >
                                                 Booking Requests
