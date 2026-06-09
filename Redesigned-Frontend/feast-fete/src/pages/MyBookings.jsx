@@ -12,6 +12,9 @@ import {
 
 const MyBookings = () => {
 
+    const API3 = import.meta.env.VITE_BOOKING_URL;
+    const API4 = import.meta.env.VITE_PAYMENT_URL;
+
     const [bookings, setBookings] = useState([]);
 
     const [loading, setLoading] = useState(true);
@@ -27,7 +30,7 @@ const MyBookings = () => {
     try {
 
         await fetch(
-            `https://feast-fete-2.onrender.com/api/booking/complete/${bookingId}`,
+            `${API3}/api/booking/complete/${bookingId}`,
             {
                 method: "PUT"
             }
@@ -60,7 +63,7 @@ const MyBookings = () => {
     try {
 
         const response = await axios.post(
-            "https://feast-fete-3.onrender.com/api/payment/create-order",
+            `${API4}/api/payment/create-order`,
             {
                 bookingId: booking.id,
                 customerEmail: booking.customerEmail,
@@ -82,7 +85,7 @@ const MyBookings = () => {
             handler: async function () {
 
                 await fetch(
-                    `https://feast-fete-2.onrender.com/api/booking/advance-paid/${booking.id}`,
+                    `${API3}/api/booking/advance-paid/${booking.id}`,
                     {
                         method: "PUT"
                     }
@@ -109,7 +112,7 @@ const MyBookings = () => {
     const downloadInvoice = (bookingId) => {
 
         window.open(
-            `https://feast-fete-2.onrender.com/api/booking/invoice/${bookingId}`,
+            `${API3}/api/booking/invoice/${bookingId}`,
             "_blank"
         );
     };
@@ -118,7 +121,7 @@ const handleCancelBooking = async (bookingId) => {
     try {
 
         await fetch(
-            `https://feast-fete-2.onrender.com/api/booking/cancel/${bookingId}`,
+            `${API3}/api/booking/cancel/${bookingId}`,
             {
                 method: "PUT"
             }
@@ -144,7 +147,7 @@ const handleCancelBooking = async (bookingId) => {
     useEffect(() => {
 
         fetch(
-            `https://feast-fete-2.onrender.com/api/booking/customer/${customerEmail}`
+            `${API3}/api/booking/customer/${customerEmail}`
         )
 
             .then((res) => {

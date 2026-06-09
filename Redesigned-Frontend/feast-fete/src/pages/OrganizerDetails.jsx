@@ -3,6 +3,9 @@ import { useParams } from "react-router-dom";
 
 const OrganizerDetails = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+    const API3 = import.meta.env.VITE_BOOKING_URL;
+
     const { email } = useParams();
 
     const [organizer, setOrganizer] = useState(null);
@@ -45,7 +48,7 @@ const OrganizerDetails = () => {
         }
 
         fetch(
-            `https://feast-fete-1.onrender.com/api/organizer/${encodeURIComponent(email)}`
+            `${API2}/api/organizer/${encodeURIComponent(email)}`
         )
 
             .then((res) => {
@@ -96,7 +99,7 @@ const OrganizerDetails = () => {
         try {
 
             const response = await fetch(
-                "https://feast-fete-2.onrender.com/api/booking/create",
+                `${API3}/api/booking/create`,
                 {
                     method: "POST",
 

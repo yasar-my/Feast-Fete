@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const EditOrganizerProfile = () => {
+    
+    const API2 = import.meta.env.VITE_PROFILE_URL;
 
     const navigate = useNavigate();
 
@@ -28,7 +30,7 @@ const EditOrganizerProfile = () => {
     // FETCH PROFILE
     useEffect(() => {
 
-        fetch(`https://feast-fete-1.onrender.com/api/organizer/${email}`)
+        fetch(`${API2}/api/organizer/${email}`)
             .then((res) => res.json())
             .then((data) => {
 
@@ -128,7 +130,7 @@ const EditOrganizerProfile = () => {
         try {
 
             const response = await fetch(
-                `https://feast-fete-1.onrender.com/api/organizer/${profileId}`,
+                `${API2}/api/organizer/${profileId}`,
                 {
                     method: "PUT",
 

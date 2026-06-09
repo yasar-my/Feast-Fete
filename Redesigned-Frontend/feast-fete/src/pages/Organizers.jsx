@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 
 const Organizers = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+
     const [organizers, setOrganizers] = useState([]);
 
     const [loading, setLoading] = useState(true);
@@ -11,7 +13,7 @@ const Organizers = () => {
 
     useEffect(() => {
 
-        fetch("https://feast-fete-1.onrender.com/api/organizer/all")
+        fetch(`${API2}/api/organizer/all`)
 
             .then((res) => {
 

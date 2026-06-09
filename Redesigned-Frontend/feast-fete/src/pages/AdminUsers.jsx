@@ -3,6 +3,8 @@ import axios from "axios";
 
 const AdminUsers = () => {
 
+    const API1 = import.meta.env.VITE_AUTH_URL;
+
     const [users, setUsers] = useState([]);
 
     const thStyle = {
@@ -20,7 +22,7 @@ const AdminUsers = () => {
             localStorage.getItem("token");
 
         axios.get(
-            "https://feast-fete.onrender.com/api/admin/users",
+            `${API1}/api/admin/users`,
             {
                 headers: {
                     Authorization:
@@ -47,7 +49,7 @@ const AdminUsers = () => {
             localStorage.getItem("token");
 
         await axios.delete(
-            `https://feast-fete.onrender.com/api/admin/user/${id}`,
+            `${API1}/api/admin/user/${id}`,
             {
                 headers: {
                     Authorization:

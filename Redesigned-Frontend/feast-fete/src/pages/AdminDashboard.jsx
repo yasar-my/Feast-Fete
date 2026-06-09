@@ -3,6 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const AdminDashboard = () => {
+    const API1 = import.meta.env.VITE_AUTH_URL;
 
     const [stats, setStats] = useState({});
 
@@ -13,7 +14,7 @@ const AdminDashboard = () => {
         const token = localStorage.getItem("token");
 
         axios.get(
-            "https://feast-fete.onrender.com/api/admin/stats",
+            `${API1}/api/admin/stats`,
             {
                 headers: {
                     Authorization: `Bearer ${token}`

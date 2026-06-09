@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const CustomerProfile = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+    
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -110,7 +112,7 @@ const CustomerProfile = () => {
             setLoading(true);
 
             const response = await fetch(
-                "https://feast-fete-1.onrender.com/api/customer/create",
+                `${API2}/api/customer/create`,
                 {
                     method: "POST",
 

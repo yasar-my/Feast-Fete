@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
 
+    const API1 = import.meta.env.VITE_AUTH_URL;
+
     const navigate = useNavigate();
 
     const [formData, setFormData] = useState({
@@ -31,7 +33,7 @@ const Register = () => {
         setLoading(true);
 
         const response = await fetch(
-            "https://feast-fete.onrender.com/api/auth/register",
+            `${API1}/api/auth/register`,
             {
                 method: "POST",
                 headers: {

@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+    const CLUD = import.meta.env.VITE_CLUD_URL;
+
     const navigate = useNavigate();
 
     const role =
@@ -47,7 +50,7 @@ const Dashboard = () => {
             );
 
             const response = await fetch(
-                "https://api.cloudinary.com/v1_1/dmytd1bjy/image/upload",
+                `${CLUD}/v1_1/dmytd1bjy/image/upload`,
                 {
                     method: "POST",
                     body: data
@@ -78,7 +81,7 @@ const Dashboard = () => {
         setProfile(updatedProfile);
 
         await fetch(
-            `https://feast-fete-1.onrender.com/api/organizer/${profile.id}`,
+            `${API2}/api/organizer/${profile.id}`,
             {
                 method: "PUT",
                 headers: {
@@ -116,7 +119,7 @@ const Dashboard = () => {
         setProfile(updatedProfile);
 
         await fetch(
-            `https://feast-fete-1.onrender.com/api/organizer/${profile.id}`,
+            `${API2}/api/organizer/${profile.id}`,
             {
                 method: "PUT",
 
@@ -138,7 +141,7 @@ const Dashboard = () => {
         if (role === "ORGANIZER") {
 
             fetch(
-                `https://feast-fete-1.onrender.com/api/organizer/${email}`
+                `${API2}/api/organizer/${email}`
             )
                 .then(async (res) => {
 

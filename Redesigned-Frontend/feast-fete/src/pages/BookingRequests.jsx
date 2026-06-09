@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 const BookingRequests = () => {
 
+    const API3 = import.meta.env.VITE_BOOKING_URL;
+
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -11,7 +13,7 @@ const BookingRequests = () => {
     useEffect(() => {
 
         fetch(
-            `https://feast-fete-2.onrender.com/api/booking/organizer/${organizerEmail}`
+            `${API3}/api/booking/organizer/${organizerEmail}`
         )
             .then((res) => res.json())
             .then((data) => {
@@ -35,7 +37,7 @@ const BookingRequests = () => {
         try {
 
             await fetch(
-                `https://feast-fete-2.onrender.com/api/booking/confirm/${id}`,
+                `${API3}/api/booking/confirm/${id}`,
                 {
                     method: "PUT"
                 }
@@ -65,7 +67,7 @@ const BookingRequests = () => {
     try {
 
         await fetch(
-            `https://feast-fete-2.onrender.com/api/booking/cancel/${id}`,
+            `${API3}/api/booking/cancel/${id}`,
             {
                 method: "PUT"
             }

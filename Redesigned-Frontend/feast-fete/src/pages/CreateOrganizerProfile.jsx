@@ -3,6 +3,9 @@ import { useNavigate } from "react-router-dom";
 
 const CreateOrganizerProfile = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+    const CLUD = import.meta.env.VITE_CLUD_URL;
+
     const navigate = useNavigate();
 
     const [error, setError] = useState("");
@@ -99,7 +102,7 @@ const CreateOrganizerProfile = () => {
         );
 
         const response = await fetch(
-            "https://api.cloudinary.com/v1_1/dmytd1bjy/image/upload",
+            `${CLUD}/v1_1/dmytd1bjy/image/upload`,
             {
                 method: "POST",
                 body: data
@@ -172,7 +175,7 @@ const CreateOrganizerProfile = () => {
             );
 
             const response = await fetch(
-                "https://feast-fete-1.onrender.com/api/organizer/create",
+                `${API2}/api/organizer/create`,
                 {
                     method: "POST",
 

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 
 const OrganizerProfile = () => {
 
+    const API2 = import.meta.env.VITE_PROFILE_URL;
+
     const navigate = useNavigate();
 
     const [profile, setProfile] = useState(null);
@@ -28,7 +30,7 @@ const OrganizerProfile = () => {
 
         // FETCH PROFILE
         fetch(
-            `https://feast-fete-1.onrender.com/api/organizer/${email}`
+            `${API2}/api/organizer/${email}`
         )
             .then(async (res) => {
 
