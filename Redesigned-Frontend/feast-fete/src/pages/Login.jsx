@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/authService";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
 
@@ -13,6 +14,8 @@ const Login = () => {
     });
 
     const [loading, setLoading] = useState(false);
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
 
@@ -298,7 +301,6 @@ const Login = () => {
                                 marginBottom: "40px"
                             }}
                         >
-
                             <label
                                 style={{
                                     display: "block",
@@ -306,8 +308,7 @@ const Login = () => {
                                     fontSize: "12px",
                                     color: "#8b7040",
                                     letterSpacing: "2px",
-                                    textTransform:
-                                        "uppercase",
+                                    textTransform: "uppercase",
                                     fontFamily:
                                         "'Montserrat', sans-serif"
                                 }}
@@ -315,30 +316,57 @@ const Login = () => {
                                 Password
                             </label>
 
-                            <input
-                                type="password"
-                                name="password"
-                                placeholder="Enter Password"
-                                value={
-                                    formData.password
-                                }
-                                onChange={handleChange}
-                                required
+                            <div
                                 style={{
-                                    width: "100%",
-                                    padding: "15px",
-                                    border: "none",
-                                    borderBottom:
-                                        "2px solid #c8b070",
-                                    background:
-                                        "transparent",
-                                    outline: "none",
-                                    fontSize: "17px",
-                                    boxSizing:
-                                        "border-box"
+                                    position: "relative"
                                 }}
-                            />
+                            >
+                                <input
+                                    type={
+                                        showPassword
+                                            ? "text"
+                                            : "password"
+                                    }
+                                    name="password"
+                                    placeholder="Enter Password"
+                                    value={formData.password}
+                                    onChange={handleChange}
+                                    required
+                                    style={{
+                                        width: "100%",
+                                        padding: "15px",
+                                        paddingRight: "45px",
+                                        border: "none",
+                                        borderBottom:
+                                            "2px solid #c8b070",
+                                        background:
+                                            "transparent",
+                                        outline: "none",
+                                        fontSize: "17px",
+                                        boxSizing:
+                                            "border-box"
+                                    }}
+                                />
 
+                                <span
+                                    onClick={() =>
+                                        setShowPassword(!showPassword)
+                                    }
+                                    style={{
+                                        position: "absolute",
+                                        right: "15px",
+                                        top: "50%",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer",
+                                        color: "#8b7040",
+                                        fontSize: "18px"
+                                    }}
+                                >
+                                    {showPassword
+                                        ? <FaEyeSlash />
+                                        : <FaEye />}
+                                </span>
+                            </div>
                         </div>
 
                         {/* BUTTON */}

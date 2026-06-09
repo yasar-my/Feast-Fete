@@ -1,11 +1,14 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Register = () => {
 
     const API1 = import.meta.env.VITE_AUTH_URL;
 
     const navigate = useNavigate();
+
+    const [showPassword, setShowPassword] = useState(false);
 
     const [formData, setFormData] = useState({
         name: "",
@@ -15,6 +18,7 @@ const Register = () => {
     });
 
     const [loading, setLoading] = useState(false);
+
 
     const handleChange = (e) => {
 
@@ -228,16 +232,46 @@ const Register = () => {
                     />
 
                     {/* PASSWORD */}
-                    <input
-                        type="password"
-                        name="password"
-                        placeholder="Password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        minLength={8}
-                        style={inputStyle}
-                    />
+                    <div
+                        style={{
+                            position: "relative",
+                            marginBottom: "22px"
+                        }}
+                    >
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            name="password"
+                            placeholder="Password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            minLength={8}
+                            style={{
+                                ...inputStyle,
+                                marginBottom: "0"
+                            }}
+                        />
+
+                        <span
+                            onClick={() =>
+                                setShowPassword(!showPassword)
+                            }
+                            style={{
+                                position: "absolute",
+                                right: "15px",
+                                top: "50%",
+                                transform: "translateY(-50%)",
+                                cursor: "pointer",
+                                fontSize: "20px"
+                            }}
+                        >
+                            {
+                                showPassword
+                                    ? <FaEyeSlash />
+                                    : <FaEye />
+                            }
+                        </span>
+                    </div>
 
                     {/* ROLE */}
                     <select
