@@ -88,6 +88,22 @@ const AdminDashboard = () => {
                     Manage Users
                 </button>
 
+                <button
+                    onClick={() => navigate("/admin/bookings")}
+                    style={{
+                        background: "#16A34A",
+                        color: "#fff",
+                        border: "none",
+                        padding: "14px 25px",
+                        borderRadius: "12px",
+                        cursor: "pointer",
+                        fontWeight: "600",
+                        marginLeft: "10px"
+                    }}
+                >
+                    Manage Bookings
+                </button>
+
             </div>
 
             {/* STATS */}
