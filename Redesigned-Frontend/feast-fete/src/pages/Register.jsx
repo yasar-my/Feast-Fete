@@ -26,7 +26,31 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
 
-    e.preventDefault();
+        e.preventDefault();
+
+        const emailRegex = /^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$/;
+
+        if (!emailRegex.test(formData.email)) {
+
+            alert(
+                "Email must contain only lowercase letters"
+            );
+
+            return;
+        }
+
+        // Password validation
+        const passwordRegex =
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&.#_-])[A-Za-z\d@$!%*?&.#_-]{8,}$/;
+
+        if (!passwordRegex.test(formData.password)) {
+
+            alert(
+                "Password must contain minimum 8 characters, 1 uppercase, 1 lowercase, 1 number and 1 special character"
+            );
+
+            return;
+        }
 
     try {
 
@@ -193,7 +217,12 @@ const Register = () => {
                         name="email"
                         placeholder="Email Address"
                         value={formData.email}
-                        onChange={handleChange}
+                        onChange={(e) =>
+                            setFormData({
+                                ...formData,
+                                email: e.target.value.toLowerCase()
+                            })
+                        }
                         required
                         style={inputStyle}
                     />
@@ -206,6 +235,7 @@ const Register = () => {
                         value={formData.password}
                         onChange={handleChange}
                         required
+                        minLength={8}
                         style={inputStyle}
                     />
 

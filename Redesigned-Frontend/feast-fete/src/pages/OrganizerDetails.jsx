@@ -18,11 +18,15 @@ const OrganizerDetails = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
 
+    const [mobileError, setMobileError] = useState("");
+
     const [bookingData, setBookingData] = useState({
 
         customerName: "",
 
-        customerEmail: "",
+        customerEmail:
+
+            localStorage.getItem("email") || "",
 
         customerMobile: "",
 
@@ -83,11 +87,53 @@ const OrganizerDetails = () => {
     // INPUT CHANGE
     const handleChange = (e) => {
 
+        const { name, value } = e.target;
+
+        if (name === "customerName") {
+
+            const onlyLetters =
+                value.replace(/[^a-zA-Z\u0B80-\u0BFF\s]/g, "");
+
+            setBookingData({
+                ...bookingData,
+                customerName: onlyLetters
+            });
+
+            return;
+        }
+
+        if (name === "customerMobile") {
+
+            const mobile =
+                value.replace(/\D/g, "");
+
+            if (mobile.length > 10) return;
+
+            setBookingData({
+                ...bookingData,
+                customerMobile: mobile
+            });
+
+            if (
+                mobile.length > 0 &&
+                mobile.length !== 10
+            ) {
+
+                setMobileError(
+                    "Mobile number must be exactly 10 digits"
+                );
+
+            } else {
+
+                setMobileError("");
+            }
+
+            return;
+        }
+
         setBookingData({
-
             ...bookingData,
-
-            [e.target.name]: e.target.value
+            [name]: value
         });
     };
 
@@ -95,6 +141,15 @@ const OrganizerDetails = () => {
     const handleBooking = async (e) => {
 
         e.preventDefault();
+
+        if (bookingData.customerMobile.length !== 10) {
+
+            setMobileError(
+                "Mobile number must be exactly 10 digits"
+            );
+
+            return;
+        }
 
         try {
 
@@ -141,7 +196,9 @@ const OrganizerDetails = () => {
 
                 customerName: "",
 
-                customerEmail: "",
+                customerEmail:
+        
+                    localStorage.getItem("email") || "",
 
                 customerMobile: "",
 
@@ -161,6 +218,15 @@ const OrganizerDetails = () => {
             alert("Booking Failed");
         }
     };
+
+    const tomorrow = new Date();
+
+    tomorrow.setDate(
+        tomorrow.getDate() + 1
+    );
+
+    const minDate =
+        tomorrow.toISOString().split("T")[0];
 
     // LOADING
     if (loading) {
@@ -423,6 +489,7 @@ const OrganizerDetails = () => {
                                             .map((img, index) => (
 
                                                 <img
+                                                    key={index}                    
                                                     src={img}
                                                     alt="food"
                                                     onClick={() => setSelectedImage(img)}
@@ -447,7 +514,7 @@ const OrganizerDetails = () => {
 
                 </div>
 
-            </div>
+            </div>    
 
             {/* BOOKING POPUP */}
             {
@@ -492,26 +559,45 @@ const OrganizerDetails = () => {
                             <input
                                 type="email"
                                 name="customerEmail"
-                                placeholder="Your Email"
                                 value={bookingData.customerEmail}
-                                onChange={handleChange}
-                                required
+                                readOnly
+                                style={{
+                                    background: "#f5f5f5"
+                                }}
                             />
 
                             <input
-                                type="text"
+                                type="tel"
                                 name="customerMobile"
-                                placeholder="Mobile Number"
+                                placeholder="10 Digit Mobile Number"
                                 value={bookingData.customerMobile}
+                                inputMode="numeric"
                                 onChange={handleChange}
+                                maxLength="10"
                                 required
                             />
+                            {
+                                mobileError && (
+
+                                    <p
+                                        style={{
+                                            color: "red",
+                                            fontSize: "13px",
+                                            marginTop: "-10px"
+                                        }}
+                                    >
+                                        {mobileError}
+                                    </p>
+
+                                )
+                            }
 
                             <textarea
                                 name="customerAddress"
-                                placeholder="Event Address"
+                                placeholder="Door No, Street Name, Area, City, District, Pincode"
                                 value={bookingData.customerAddress}
                                 onChange={handleChange}
+                                minLength={15}
                                 required
                             />
 
@@ -520,6 +606,7 @@ const OrganizerDetails = () => {
                                 name="eventDate"
                                 value={bookingData.eventDate}
                                 onChange={handleChange}
+                                min={minDate}
                                 required
                             />
 
@@ -551,6 +638,8 @@ const OrganizerDetails = () => {
                             <input
                                 type="number"
                                 name="guestCount"
+                                min={organizer.minPeople}
+                                max={organizer.maxPeople}
                                 placeholder="Guest Count"
                                 value={bookingData.guestCount}
                                 onChange={handleChange}

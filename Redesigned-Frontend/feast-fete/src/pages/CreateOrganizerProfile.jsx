@@ -34,10 +34,32 @@ const CreateOrganizerProfile = () => {
 
         setError("");
 
+        if (
+            name === "serviceName" ||
+            name === "name"
+        ) {
+
+            const onlyLetters =
+                value.replace(
+                    /[^a-zA-Z\u0B80-\u0BFF\s]/g,
+                    ""
+                );
+
+            setFormData({
+                ...formData,
+                [name]: onlyLetters
+            });
+
+            return;
+        }
+
         // MOBILE ONLY NUMBER
         if (name === "mobile") {
 
-            const onlyNums = value.replace(/\D/g, "");
+            const onlyNums =
+                value.replace(/\D/g, "");
+
+            if (onlyNums.length > 10) return;
 
             setFormData({
                 ...formData,
@@ -59,6 +81,30 @@ const CreateOrganizerProfile = () => {
         const file = e.target.files[0];
 
         if (!file) return;
+
+        const allowedTypes = [
+        "image/jpeg",
+        "image/jpg",
+        "image/png",
+        "image/webp"
+        ];
+
+        if (!allowedTypes.includes(file.type)) {
+        setError("Only JPG, JPEG, PNG, WEBP Images Allowed");
+        return;
+        }
+
+        // MAX 5MB
+        if (file.size > 5 * 1024 * 1024) {
+
+            setError(
+                "Image Size Must Be Below 5MB"
+            );
+
+            return;
+        }
+
+        setError("");
 
         const previewUrl =
             URL.createObjectURL(file);
@@ -130,6 +176,14 @@ const CreateOrganizerProfile = () => {
 
             return;
         }
+        if (!/^[6-9]\d{9}$/.test(formData.mobile)) {
+
+            setError(
+                "Enter Valid 10 Digit Mobile Number"
+            );
+
+            return;
+        }
 
         // MIN PEOPLE VALIDATION
         if (
@@ -150,6 +204,17 @@ const CreateOrganizerProfile = () => {
 
             setError(
                 "Maximum People Must Be Below 10000"
+            );
+
+            return;
+        }
+        if (
+            Number(formData.maxPeople) <=
+            Number(formData.minPeople)
+        ) {
+
+            setError(
+                "Maximum People Must Be Greater Than Minimum People"
             );
 
             return;
@@ -315,7 +380,7 @@ const CreateOrganizerProfile = () => {
 
                     <input
                         type="file"
-                        accept="image/*"
+                        accept=".jpg,.jpeg,.png,.webp"
                         onChange={
                             handleImageChange
                         }
@@ -438,7 +503,8 @@ const CreateOrganizerProfile = () => {
 
                 {/* MOBILE */}
                 <input
-                    type="text"
+                    type="tel"
+                    inputMode="numeric"
                     name="mobile"
                     placeholder="Enter 10 Digit Mobile Number"
                     value={formData.mobile}
@@ -504,6 +570,7 @@ const CreateOrganizerProfile = () => {
                     onChange={handleChange}
                     required
                     style={inputStyle}
+                    min="100"
                 />
 
                 {/* MAX PEOPLE */}
@@ -515,6 +582,7 @@ const CreateOrganizerProfile = () => {
                     onChange={handleChange}
                     required
                     style={inputStyle}
+                    min="110"
                 />
 
                 {/* MENU */}
@@ -540,6 +608,7 @@ const CreateOrganizerProfile = () => {
                     onChange={handleChange}
                     required
                     style={inputStyle}
+                    min="50"
                 />
 
                 {/* BUTTON */}

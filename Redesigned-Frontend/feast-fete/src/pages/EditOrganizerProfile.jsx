@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 const EditOrganizerProfile = () => {
     
     const API2 = import.meta.env.VITE_PROFILE_URL;
+    const CLUD = import.meta.env.VITE_CLUD_URL;
 
     const navigate = useNavigate();
 
     const email = localStorage.getItem("email");
 
     const [profileId, setProfileId] = useState(null);
+
+    const [preview, setPreview] = useState("");
 
     const [formData, setFormData] = useState({
         profilePhoto: "",
@@ -37,6 +40,8 @@ const EditOrganizerProfile = () => {
                 setProfileId(data.id);
 
                 setFormData(data);
+
+                setPreview(data.profilePhoto);
             });
 
     }, [email]);
@@ -46,12 +51,48 @@ const EditOrganizerProfile = () => {
 
         const { name, value } = e.target;
 
+        // SERVICE NAME & ORGANIZER NAME
+        if (
+            name === "serviceName" ||
+            name === "name"
+        ) {
+
+            const onlyLetters =
+                value.replace(
+                    /[^a-zA-Z\u0B80-\u0BFF\s]/g,
+                    ""
+                );
+
+            setFormData({
+                ...formData,
+                [name]: onlyLetters
+            });
+            setErrors({
+                ...errors,
+                [name]: ""
+            });
+
+            return;
+        }
+
         // MOBILE ONLY NUMBER
         if (name === "mobile") {
 
-            if (!/^\d*$/.test(value)) return;
+            const onlyNums =
+                value.replace(/\D/g, "");
 
-            if (value.length > 10) return;
+            if (onlyNums.length > 10) return;
+
+            setFormData({
+                ...formData,
+                mobile: onlyNums
+            });
+            setErrors({
+                ...errors,
+                mobile: ""
+            });
+
+            return;
         }
 
         setFormData({
@@ -59,7 +100,6 @@ const EditOrganizerProfile = () => {
             [name]: value
         });
 
-        // ERROR REMOVE AFTER TYPING
         setErrors({
             ...errors,
             [name]: ""
@@ -67,18 +107,93 @@ const EditOrganizerProfile = () => {
     };
 
     // IMAGE CHANGE
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
 
         const file = e.target.files[0];
 
         if (!file) return;
 
-        const imageUrl = URL.createObjectURL(file);
+        const allowedTypes = [
+            "image/jpeg",
+            "image/jpg",
+            "image/png",
+            "image/webp"
+        ];
 
-        setFormData({
-            ...formData,
-            profilePhoto: imageUrl
-        });
+        if (!allowedTypes.includes(file.type)) {
+
+            setErrors({
+                ...errors,
+                profilePhoto:
+                    "Only JPG, JPEG, PNG, WEBP Images Allowed"
+            });
+
+            return;
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+
+            setErrors({
+                ...errors,
+                profilePhoto:
+                    "Image Size Must Be Below 5MB"
+            });
+
+            return;
+        }
+
+        const previewUrl =
+            URL.createObjectURL(file);
+
+        setPreview(previewUrl);
+        try {
+
+            const cloudinaryUrl =
+                await uploadImageToCloudinary(file);
+
+            setFormData(prev => ({
+                ...prev,
+                profilePhoto: cloudinaryUrl
+            }));
+            setErrors(prev => ({
+                ...prev,
+                profilePhoto: ""
+            }));
+
+        } catch (err) {
+
+            console.log(err);
+
+            setErrors(prev => ({
+                ...prev,
+                profilePhoto:
+                    "Image Upload Failed"
+            }));
+        }
+    };
+
+    const uploadImageToCloudinary = async (file) => {
+
+        const data = new FormData();
+
+        data.append("file", file);
+
+        data.append(
+            "upload_preset",
+            "feast_fete_upload"
+        );
+
+        const response = await fetch(
+            `${CLUD}/v1_1/dmytd1bjy/image/upload`,
+            {
+                method: "POST",
+                body: data
+            }
+        );
+
+        const result = await response.json();
+
+        return result.secure_url;
     };
 
     // SUBMIT
@@ -95,6 +210,12 @@ const EditOrganizerProfile = () => {
                 "Mobile Number Must Be 10 Digits";
         }
 
+        if (!/^[6-9]\d{9}$/.test(formData.mobile)) {
+
+            newErrors.mobile =
+                "Enter Valid 10 Digit Mobile Number";
+        }
+
         // MIN PEOPLE
         if (Number(formData.minPeople) < 100) {
 
@@ -107,6 +228,15 @@ const EditOrganizerProfile = () => {
 
             newErrors.maxPeople =
                 "Maximum People Must Be Below 10000";
+        }
+
+        if (
+            Number(formData.maxPeople) <=
+            Number(formData.minPeople)
+        ) {
+
+            newErrors.maxPeople =
+                "Maximum People Must Be Greater Than Minimum People";
         }
 
         // PLATE RATE
@@ -197,16 +327,23 @@ const EditOrganizerProfile = () => {
 
                 <input
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png,.webp"
                     onChange={handleImageChange}
                     style={inputStyle}
                 />
+                {
+                    errors.profilePhoto && (
+                        <p style={errorStyle}>
+                            {errors.profilePhoto}
+                        </p>
+                    )
+                }
 
                 {
-                    formData.profilePhoto && (
+                     (preview || formData.profilePhoto) && (
 
                         <img
-                            src={formData.profilePhoto}
+                            src={preview || formData.profilePhoto}
                             alt="preview"
                             style={{
                                 width: "120px",
@@ -271,6 +408,13 @@ const EditOrganizerProfile = () => {
 
                     <option value="Alangulam">
                         Alangulam
+                    </option>
+                    <option value="Puliyangudi">
+                        Puliyangudi
+                    </option>
+
+                    <option value="Surandai">
+                        Surandai
                     </option>
 
                 </select>
@@ -340,6 +484,13 @@ const EditOrganizerProfile = () => {
                     <option value="BBQ">
                         BBQ
                     </option>
+                    <option value="Sea Food">
+                        Sea Food
+                    </option>
+
+                    <option value="Arabian">
+                        Arabian
+                    </option>
 
                 </select>
 
@@ -351,6 +502,7 @@ const EditOrganizerProfile = () => {
                     value={formData.minPeople}
                     onChange={handleChange}
                     required
+                    min="100"
                     style={inputStyle}
                 />
 
@@ -371,6 +523,7 @@ const EditOrganizerProfile = () => {
                     value={formData.maxPeople}
                     onChange={handleChange}
                     required
+                    min="110"
                     style={inputStyle}
                 />
 
@@ -404,6 +557,7 @@ const EditOrganizerProfile = () => {
                     value={formData.plateRate}
                     onChange={handleChange}
                     required
+                    min="50"
                     style={inputStyle}
                 />
 
