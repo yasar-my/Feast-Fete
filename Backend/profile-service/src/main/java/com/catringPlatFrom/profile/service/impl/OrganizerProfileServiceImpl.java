@@ -140,4 +140,19 @@ public class OrganizerProfileServiceImpl
                 .plateRate(profile.getPlateRate())
                 .build();
     }
+
+        @Override
+        public void deleteProfileByEmail(
+                String email
+        ) {
+
+        OrganizerProfile profile =
+                repository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Profile Not Found"
+                                ));
+
+        repository.delete(profile);
+        }
 }

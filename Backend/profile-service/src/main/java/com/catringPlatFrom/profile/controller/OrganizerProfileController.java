@@ -57,4 +57,14 @@ public class OrganizerProfileController {
 
         return "Profile Deleted Successfully";
     }
+
+    @DeleteMapping("/email/{email}")
+    public String deleteProfileByEmail(
+            @PathVariable String email
+    ) {
+
+        service.deleteProfileByEmail(email);
+
+        return "Profile Deleted Successfully";
+    }
 }
