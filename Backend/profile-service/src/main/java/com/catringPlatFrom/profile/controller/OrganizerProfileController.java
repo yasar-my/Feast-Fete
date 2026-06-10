@@ -67,4 +67,12 @@ public class OrganizerProfileController {
 
         return "Profile Deleted Successfully";
     }
+
+    @DeleteMapping("/delete-all-organizers")
+    public String deleteAllProfiles() {
+
+        service.deleteAllProfiles();
+
+        return "All Organizer Profiles Deleted Successfully";
+    }
 }

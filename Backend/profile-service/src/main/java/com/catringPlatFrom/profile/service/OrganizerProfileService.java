@@ -25,4 +25,6 @@ public interface OrganizerProfileService {
     void deleteProfile(Long id);
 
     void deleteProfileByEmail(String email);
+
+    void deleteAllProfiles();
 }

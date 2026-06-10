@@ -155,4 +155,10 @@ public class OrganizerProfileServiceImpl
 
         repository.delete(profile);
         }
+
+        @Override
+        public void deleteAllProfiles() {
+
+        repository.deleteAll();
+        }
 }
