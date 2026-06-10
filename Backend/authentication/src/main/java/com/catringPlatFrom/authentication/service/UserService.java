@@ -14,4 +14,6 @@ public interface UserService {
     AuthResponseDTO login(LoginRequestDTO request);
 
     List<User> getOrganizers();
+
+    void deleteUser(Long id);
 }

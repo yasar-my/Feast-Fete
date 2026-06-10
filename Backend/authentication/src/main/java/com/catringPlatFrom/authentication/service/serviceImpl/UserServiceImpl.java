@@ -40,6 +40,8 @@ public class UserServiceImpl implements UserService {
 
     private final RefreshTokenService refreshTokenService;
 
+    private final RestTemplate restTemplate;
+
     @Override
     public String register(RegisterRequestDTO request) {
 
@@ -122,4 +124,28 @@ public class UserServiceImpl implements UserService {
     public List<User> getOrganizers() {
 
         return userRepository.findByRole("ORGANIZER");    }
+
+
+        @Override
+        public void deleteUser(Long id) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() ->
+                        new UserNotFoundException("User Not Found"));
+
+        if(user.getRole().equals("ADMIN")) {
+
+                throw new RuntimeException("Cannot Delete Admin");
+        }
+
+        if(user.getRole().equals("ORGANIZER")) {
+
+                restTemplate.delete(
+                        "https://feast-fete-1.onrender.com/api/organizer/email/"
+                                + user.getEmail()
+                );
+        }
+
+        userRepository.delete(user);
+        }
 }
