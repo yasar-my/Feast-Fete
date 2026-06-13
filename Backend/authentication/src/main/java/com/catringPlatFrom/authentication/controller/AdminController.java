@@ -1,6 +1,7 @@
 package com.catringPlatFrom.authentication.controller;
 
 import com.catringPlatFrom.authentication.repository.UserRepository;
+import com.catringPlatFrom.authentication.service.UserService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public class AdminController {
 
     private final UserRepository userRepository;
+    private final UserService userService;
 
     @GetMapping("/stats")
     public Map<String, Long> getStats() {
@@ -51,16 +53,7 @@ public class AdminController {
             @PathVariable Long id
     ) {
 
-        User user =
-                userRepository.findById(id)
-                        .orElseThrow();
-
-        if(user.getRole().equals("ADMIN")) {
-
-            return "Cannot delete admin";
-        }
-
-        userRepository.deleteById(id);
+        userService.deleteUser(id);
 
         return "User Deleted";
     }
