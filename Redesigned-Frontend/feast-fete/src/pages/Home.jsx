@@ -272,229 +272,93 @@ const Home = () => {
 
             </section>
 
-            {/* SERVICES SECTION */}
-
             <section
-            style={{
-                padding: "100px 20px",
-                background: "#fff",
-            }}
-            >
-            <h2
                 style={{
-                textAlign: "center",
-                fontSize: "50px",
-                color: "#2b1408",
-                marginBottom: "50px",
-                }}
-            >
-                Our Premium Services
-            </h2>
-
-            <div
-                style={{
-                maxWidth: "1200px",
-                margin: "auto",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
-                gap: "30px",
-                }}
-            >
-                {[
-                {
-                    title: "Wedding Catering",
-                    img: "https://images.unsplash.com/photo-1519167758481-83f29c1bdf8",
-                },
-                {
-                    title: "Corporate Events",
-                    img: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-                },
-                {
-                    title: "Private Parties",
-                    img: "https://images.unsplash.com/photo-1555244162-803834f70033",
-                },
-                ].map((service, index) => (
-                <div
-                    key={index}
-                    style={{
+                    padding: "80px 20px",
                     background: "#fff",
-                    borderRadius: "20px",
-                    overflow: "hidden",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.1)",
+                }}
+                >
+                <div
+                    style={{
+                    maxWidth: "1300px",
+                    margin: "auto",
                     }}
                 >
-                    <img
-                    src={service.img}
-                    alt={service.title}
+                    <h2
                     style={{
-                        width: "100%",
-                        height: "250px",
-                        objectFit: "cover",
+                        textAlign: "center",
+                        fontSize: "clamp(2rem,5vw,4rem)",
+                        color: "#2b1408",
+                        marginBottom: "50px",
                     }}
-                    />
+                    >
+                    Our Premium Services
+                    </h2>
 
-                    <div style={{ padding: "20px" }}>
-                    <h3>{service.title}</h3>
-                    <p style={{ color: "#666" }}>
-                        Premium catering tailored for memorable experiences.
-                    </p>
+                    <div
+                    style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
+                        gap: "30px",
+                    }}
+                    >
+                    {[
+                        {
+                        title: "Wedding Catering",
+                        image:
+                            "https://images.unsplash.com/photo-1519167758481-83f29c1bdf8",
+                        },
+                        {
+                        title: "Corporate Events",
+                        image:
+                            "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
+                        },
+                        {
+                        title: "Private Parties",
+                        image:
+                            "https://images.unsplash.com/photo-1555244162-803834f70033",
+                        },
+                    ].map((item, index) => (
+                        <div
+                        key={index}
+                        style={{
+                            background: "#fff",
+                            borderRadius: "20px",
+                            overflow: "hidden",
+                            boxShadow: "0 10px 30px rgba(0,0,0,.1)",
+                        }}
+                        >
+                        <img
+                            src={item.image}
+                            alt=""
+                            style={{
+                            width: "100%",
+                            height: "250px",
+                            objectFit: "cover",
+                            }}
+                        />
+
+                        <div style={{ padding: "20px" }}>
+                            <h3
+                            style={{
+                                color: "#2b1408",
+                                marginBottom: "10px",
+                            }}
+                            >
+                            {item.title}
+                            </h3>
+
+                            <p style={{ color: "#666" }}>
+                            Premium catering experience for all occasions.
+                            </p>
+                        </div>
+                        </div>
+                    ))}
                     </div>
                 </div>
-                ))}
-            </div>
-            </section>
+                </section>
 
-            {/* WHY CHOOSE US */}
-
-            <section
-            style={{
-                padding: "100px 20px",
-                background: "#2b1408",
-                color: "#fff",
-            }}
-            >
-            <h2
-                style={{
-                textAlign: "center",
-                fontSize: "50px",
-                marginBottom: "60px",
-                }}
-            >
-                Why Choose Feast & Fete
-            </h2>
-
-            <div
-                style={{
-                maxWidth: "1200px",
-                margin: "auto",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(250px,1fr))",
-                gap: "30px",
-                }}
-            >
-                <div>
-                <h3>⭐ 500+ Events</h3>
-                <p>Successfully catered luxury events.</p>
-                </div>
-
-                <div>
-                <h3>👨‍🍳 Expert Chefs</h3>
-                <p>Professional culinary team.</p>
-                </div>
-
-                <div>
-                <h3>🍽 Premium Menus</h3>
-                <p>Customized dishes for every occasion.</p>
-                </div>
-
-                <div>
-                <h3>🏆 Top Rated</h3>
-                <p>Trusted by hundreds of happy clients.</p>
-                </div>
-            </div>
-            </section>
-
-            {/* TESTIMONIALS */}
-
-            <section
-            style={{
-                padding: "100px 20px",
-                background: "#f8f5f0",
-            }}
-            >
-            <h2
-                style={{
-                textAlign: "center",
-                fontSize: "50px",
-                color: "#2b1408",
-                marginBottom: "50px",
-                }}
-            >
-                What Our Clients Say
-            </h2>
-
-            <div
-                style={{
-                maxWidth: "1200px",
-                margin: "auto",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
-                gap: "30px",
-                }}
-            >
-                <div
-                style={{
-                    background: "#fff",
-                    padding: "30px",
-                    borderRadius: "20px",
-                }}
-                >
-                <h3>★★★★★</h3>
-                <p>
-                    Amazing catering service. Food quality and presentation were
-                    outstanding.
-                </p>
-                <strong>- Sarah</strong>
-                </div>
-
-                <div
-                style={{
-                    background: "#fff",
-                    padding: "30px",
-                    borderRadius: "20px",
-                }}
-                >
-                <h3>★★★★★</h3>
-                <p>
-                    Perfect arrangement for our corporate event. Highly recommended.
-                </p>
-                <strong>- David</strong>
-                </div>
-            </div>
-            </section>
-
-            {/* CTA SECTION */}
-
-            <section
-            style={{
-                padding: "120px 20px",
-                background: "linear-gradient(135deg,#2b1408,#5a2f12)",
-                textAlign: "center",
-                color: "#fff",
-            }}
-            >
-            <h2
-                style={{
-                fontSize: "55px",
-                marginBottom: "20px",
-                }}
-            >
-                Ready To Host Your Next Event?
-            </h2>
-
-            <p
-                style={{
-                fontSize: "22px",
-                marginBottom: "40px",
-                }}
-            >
-                Let's create an unforgettable dining experience together.
-            </p>
-
-            <Link
-                to="/register"
-                style={{
-                padding: "18px 40px",
-                background: "#b8860b",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "50px",
-                fontWeight: "600",
-                }}
-            >
-                Book Now
-            </Link>
-            </section>
+            
 
         </div>
     );
