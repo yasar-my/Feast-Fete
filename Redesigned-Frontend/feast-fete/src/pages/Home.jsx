@@ -386,17 +386,35 @@ const Home = () => {
                     <p>Events Successfully Hosted</p>
                     </div>
 
-                <div>
+                <div
+                    style={{
+                        background: "rgba(255,255,255,0.08)",
+                        padding: "30px",
+                        borderRadius: "20px",
+                        textAlign: "center",
+                    }}>
                 <h3>👨‍🍳 Expert Chefs</h3>
                 <p>Professional culinary team.</p>
                 </div>
 
-                <div>
+                <div
+                    style={{
+                        background: "rgba(255,255,255,0.08)",
+                        padding: "30px",
+                        borderRadius: "20px",
+                        textAlign: "center",
+                    }}>
                 <h3>🍽 Premium Menus</h3>
                 <p>Customized dishes for every occasion.</p>
                 </div>
 
-                <div>
+                <div
+                    style={{
+                        background: "rgba(255,255,255,0.08)",
+                        padding: "30px",
+                        borderRadius: "20px",
+                        textAlign: "center",
+                    }}>
                 <h3>🏆 Top Rated</h3>
                 <p>Trusted by hundreds of happy clients.</p>
                 </div>
