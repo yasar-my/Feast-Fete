@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CustomerProfile = () => {
@@ -6,6 +6,13 @@ const CustomerProfile = () => {
     const API2 = import.meta.env.VITE_PROFILE_URL;
     
     const navigate = useNavigate();
+
+    const [loaded, setLoaded] = useState(false);
+
+    useEffect(() => {
+        const t = setTimeout(() => setLoaded(true), 50);
+        return () => clearTimeout(t);
+    }, []);
 
     const [formData, setFormData] = useState({
 
@@ -165,6 +172,8 @@ const CustomerProfile = () => {
         }
     };
 
+    const isSuccess = message.includes("Successfully");
+
     return (
 
         <div
@@ -177,6 +186,79 @@ const CustomerProfile = () => {
                 padding: "40px 20px"
             }}
         >
+            <style>{`
+                @keyframes formIn {
+                    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                @keyframes shake {
+                    10%, 90% { transform: translateX(-1px); }
+                    20%, 80% { transform: translateX(2px); }
+                    30%, 50%, 70% { transform: translateX(-4px); }
+                    40%, 60% { transform: translateX(4px); }
+                }
+                @keyframes popIn {
+                    from { opacity: 0; transform: scale(0.8); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+                @keyframes checkPulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.15); }
+                }
+
+                .form-field {
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                }
+                .form-field:focus {
+                    outline: none;
+                    border-color: #b8860b !important;
+                    box-shadow: 0 0 0 4px rgba(184,134,11,0.16);
+                }
+
+                .message-banner { animation: popIn 0.35s cubic-bezier(0.22,1,0.36,1); }
+                .message-banner.is-error { animation: shake 0.5s ease; }
+                .message-banner.is-success .check-icon { animation: checkPulse 1s ease-in-out infinite; }
+
+                .preview-pop { animation: popIn 0.4s cubic-bezier(0.22,1,0.36,1); }
+
+                .submit-btn {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+                }
+                .submit-btn:hover:not(:disabled) {
+                    transform: translateY(-3px);
+                    box-shadow: 0 14px 28px rgba(43,20,8,0.3);
+                }
+                .submit-btn:active:not(:disabled) {
+                    transform: translateY(-1px) scale(0.98);
+                }
+                .submit-btn:disabled {
+                    opacity: 0.75;
+                    cursor: not-allowed;
+                }
+
+                .spin {
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid rgba(255,255,255,0.4);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+                    animation: spin 0.7s linear infinite;
+                    vertical-align: middle;
+                    margin-right: 8px;
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    *, *::before, *::after {
+                        animation-duration: 0.001ms !important;
+                        animation-iteration-count: 1 !important;
+                        transition-duration: 0.001ms !important;
+                    }
+                }
+            `}</style>
 
             <form
                 onSubmit={handleSubmit}
@@ -187,7 +269,9 @@ const CustomerProfile = () => {
                     padding: "50px",
                     borderRadius: "30px",
                     boxShadow:
-                        "0 10px 30px rgba(0,0,0,0.1)"
+                        "0 10px 30px rgba(0,0,0,0.1)",
+                    opacity: loaded ? 1 : 0,
+                    animation: loaded ? "formIn 0.6s cubic-bezier(0.22,1,0.36,1)" : "none",
                 }}
             >
 
@@ -207,32 +291,19 @@ const CustomerProfile = () => {
                     message && (
 
                         <div
+                            key={message}
+                            className={`message-banner ${isSuccess ? "is-success" : "is-error"}`}
                             style={{
-                                background:
-                                    message.includes(
-                                        "Successfully"
-                                    )
-                                        ? "#d4edda"
-                                        : "#f8d7da",
-
-                                color:
-                                    message.includes(
-                                        "Successfully"
-                                    )
-                                        ? "green"
-                                        : "red",
-
+                                background: isSuccess ? "#d4edda" : "#f8d7da",
+                                color: isSuccess ? "green" : "red",
                                 padding: "15px",
-
                                 borderRadius: "10px",
-
                                 marginBottom: "25px",
-
                                 textAlign: "center",
-
                                 fontWeight: "600"
                             }}
                         >
+                            {isSuccess && <span className="check-icon" style={{ display: "inline-block", marginRight: "8px" }}>✅</span>}
                             {message}
                         </div>
                     )
@@ -259,6 +330,7 @@ const CustomerProfile = () => {
                         type="file"
                         accept="image/*"
                         onChange={handleImageChange}
+                        className="form-field"
                         style={inputStyle}
                     />
 
@@ -269,6 +341,7 @@ const CustomerProfile = () => {
                     preview && (
 
                         <div
+                            className="preview-pop"
                             style={{
                                 textAlign: "center",
                                 marginBottom: "25px"
@@ -299,6 +372,7 @@ const CustomerProfile = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -321,6 +395,7 @@ const CustomerProfile = () => {
                     onChange={handleChange}
                     maxLength={10}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -331,6 +406,7 @@ const CustomerProfile = () => {
                     onChange={handleChange}
                     rows={4}
                     required
+                    className="form-field"
                     style={{
                         ...inputStyle,
                         resize: "none"
@@ -344,6 +420,7 @@ const CustomerProfile = () => {
                     value={formData.city}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -354,6 +431,7 @@ const CustomerProfile = () => {
                     value={formData.state}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -365,15 +443,18 @@ const CustomerProfile = () => {
                     onChange={handleChange}
                     maxLength={6}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
                 <button
                     type="submit"
                     disabled={loading}
+                    className="submit-btn"
                     style={buttonStyle}
                 >
 
+                    {loading && <span className="spin" />}
                     {
                         loading
                             ? "Creating..."

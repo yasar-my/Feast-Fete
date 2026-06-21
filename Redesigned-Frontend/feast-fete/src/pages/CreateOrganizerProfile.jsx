@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CreateOrganizerProfile = () => {
@@ -9,6 +9,9 @@ const CreateOrganizerProfile = () => {
     const navigate = useNavigate();
 
     const [error, setError] = useState("");
+    const [loaded, setLoaded] = useState(false);
+    const [uploading, setUploading] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const [formData, setFormData] = useState({
 
@@ -26,6 +29,12 @@ const CreateOrganizerProfile = () => {
     });
 
     const [preview, setPreview] = useState("");
+
+    // mount entrance
+    useEffect(() => {
+        const t = setTimeout(() => setLoaded(true), 50);
+        return () => clearTimeout(t);
+    }, []);
 
     // INPUT CHANGE
     const handleChange = (e) => {
@@ -110,6 +119,7 @@ const CreateOrganizerProfile = () => {
             URL.createObjectURL(file);
 
         setPreview(previewUrl);
+        setUploading(true);
 
         try {
 
@@ -133,6 +143,8 @@ const CreateOrganizerProfile = () => {
             alert(
                 "Image Upload Failed"
             );
+        } finally {
+            setUploading(false);
         }
     };
 
@@ -232,6 +244,8 @@ const CreateOrganizerProfile = () => {
             return;
         }
 
+        setSubmitting(true);
+
         try {
 
             console.log(
@@ -301,6 +315,8 @@ const CreateOrganizerProfile = () => {
             setError(
                 "Server Connection Failed"
             );
+        } finally {
+            setSubmitting(false);
         }
     };
 
@@ -316,6 +332,80 @@ const CreateOrganizerProfile = () => {
                 padding: "40px 20px"
             }}
         >
+            <style>{`
+                @keyframes formIn {
+                    from { opacity: 0; transform: translateY(28px) scale(0.97); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+                @keyframes shake {
+                    10%, 90% { transform: translateX(-1px); }
+                    20%, 80% { transform: translateX(2px); }
+                    30%, 50%, 70% { transform: translateX(-4px); }
+                    40%, 60% { transform: translateX(4px); }
+                }
+                @keyframes popIn {
+                    from { opacity: 0; transform: scale(0.8); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                @keyframes spin {
+                    to { transform: rotate(360deg); }
+                }
+
+                .form-field {
+                    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+                }
+                .form-field:focus {
+                    outline: none;
+                    border-color: #b8860b !important;
+                    box-shadow: 0 0 0 4px rgba(184,134,11,0.16);
+                }
+
+                .error-banner { animation: shake 0.5s ease; }
+
+                .submit-btn {
+                    transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+                }
+                .submit-btn:hover:not(:disabled) {
+                    transform: translateY(-3px);
+                    box-shadow: 0 14px 28px rgba(43,20,8,0.3);
+                }
+                .submit-btn:active:not(:disabled) {
+                    transform: translateY(-1px) scale(0.98);
+                }
+                .submit-btn:disabled {
+                    opacity: 0.75;
+                    cursor: not-allowed;
+                }
+
+                .spin {
+                    display: inline-block;
+                    width: 16px;
+                    height: 16px;
+                    border: 2px solid rgba(255,255,255,0.4);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+                    animation: spin 0.7s linear infinite;
+                    vertical-align: middle;
+                    margin-right: 8px;
+                }
+
+                .upload-spinner {
+                    width: 30px;
+                    height: 30px;
+                    border: 3px solid rgba(255,255,255,0.4);
+                    border-top-color: #fff;
+                    border-radius: 50%;
+                    animation: spin 0.7s linear infinite;
+                }
+
+                @media (prefers-reduced-motion: reduce) {
+                    *, *::before, *::after {
+                        animation-duration: 0.001ms !important;
+                        animation-iteration-count: 1 !important;
+                        transition-duration: 0.001ms !important;
+                    }
+                }
+            `}</style>
 
             <form
                 onSubmit={handleSubmit}
@@ -326,7 +416,9 @@ const CreateOrganizerProfile = () => {
                     padding: "50px",
                     borderRadius: "30px",
                     boxShadow:
-                        "0 10px 40px rgba(0,0,0,0.08)"
+                        "0 10px 40px rgba(0,0,0,0.08)",
+                    opacity: loaded ? 1 : 0,
+                    animation: loaded ? "formIn 0.6s cubic-bezier(0.22,1,0.36,1)" : "none",
                 }}
             >
 
@@ -346,6 +438,8 @@ const CreateOrganizerProfile = () => {
                     error && (
 
                         <div
+                            key={error}
+                            className="error-banner"
                             style={{
                                 background: "#ffe5e5",
                                 color: "#d00000",
@@ -385,6 +479,7 @@ const CreateOrganizerProfile = () => {
                             handleImageChange
                         }
                         required
+                        className="form-field"
                         style={fileInput}
                     />
 
@@ -401,18 +496,42 @@ const CreateOrganizerProfile = () => {
                             }}
                         >
 
-                            <img
-                                src={preview}
-                                alt="preview"
+                            <div
                                 style={{
-                                    width: "160px",
-                                    height: "160px",
-                                    borderRadius: "20px",
-                                    objectFit: "cover",
-                                    border:
-                                        "4px solid #2b1408"
+                                    position: "relative",
+                                    display: "inline-block",
+                                    animation: "popIn 0.4s cubic-bezier(0.22,1,0.36,1)",
                                 }}
-                            />
+                            >
+                                <img
+                                    src={preview}
+                                    alt="preview"
+                                    style={{
+                                        width: "160px",
+                                        height: "160px",
+                                        borderRadius: "20px",
+                                        objectFit: "cover",
+                                        border: "4px solid #2b1408",
+                                        filter: uploading ? "brightness(0.6)" : "none",
+                                        transition: "filter 0.3s ease",
+                                        display: "block",
+                                    }}
+                                />
+
+                                {uploading && (
+                                    <div
+                                        style={{
+                                            position: "absolute",
+                                            inset: 0,
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                        }}
+                                    >
+                                        <div className="upload-spinner" />
+                                    </div>
+                                )}
+                            </div>
 
                         </div>
                     )
@@ -428,6 +547,7 @@ const CreateOrganizerProfile = () => {
                     }
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -439,6 +559,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.name}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -448,6 +569,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.location}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 >
 
@@ -511,6 +633,7 @@ const CreateOrganizerProfile = () => {
                     onChange={handleChange}
                     maxLength={10}
                     required
+                    className="form-field"
                     style={inputStyle}
                 />
 
@@ -520,6 +643,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.foodType}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                 >
 
@@ -569,6 +693,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.minPeople}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                     min="100"
                 />
@@ -581,6 +706,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.maxPeople}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                     min="110"
                 />
@@ -593,6 +719,7 @@ const CreateOrganizerProfile = () => {
                     onChange={handleChange}
                     required
                     rows={5}
+                    className="form-field"
                     style={{
                         ...inputStyle,
                         resize: "none"
@@ -607,6 +734,7 @@ const CreateOrganizerProfile = () => {
                     value={formData.plateRate}
                     onChange={handleChange}
                     required
+                    className="form-field"
                     style={inputStyle}
                     min="50"
                 />
@@ -614,6 +742,8 @@ const CreateOrganizerProfile = () => {
                 {/* BUTTON */}
                 <button
                     type="submit"
+                    disabled={submitting || uploading}
+                    className="submit-btn"
                     style={{
                         width: "100%",
                         padding: "18px",
@@ -627,7 +757,8 @@ const CreateOrganizerProfile = () => {
                         fontWeight: "600"
                     }}
                 >
-                    Create Organizer Profile
+                    {submitting && <span className="spin" />}
+                    {submitting ? "Creating Profile..." : "Create Organizer Profile"}
                 </button>
 
             </form>

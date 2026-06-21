@@ -6,9 +6,16 @@ const BookingRequests = () => {
 
     const [requests, setRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [loaded, setLoaded] = useState(false);
+    const [justUpdated, setJustUpdated] = useState(null);
 
     const organizerEmail =
         localStorage.getItem("email");
+
+    useEffect(() => {
+        const t = setTimeout(() => setLoaded(true), 50);
+        return () => clearTimeout(t);
+    }, []);
 
     useEffect(() => {
 
@@ -30,6 +37,11 @@ const BookingRequests = () => {
             });
 
     }, [organizerEmail]);
+
+    const flash = (id) => {
+        setJustUpdated(id);
+        setTimeout(() => setJustUpdated(null), 900);
+    };
 
     // CONFIRM BOOKING
     const confirmBooking = async (id) => {
@@ -54,6 +66,8 @@ const BookingRequests = () => {
                         : booking
                 )
             );
+
+            flash(id);
 
         } catch (error) {
 
@@ -84,6 +98,8 @@ const BookingRequests = () => {
                     : booking
             )
         );
+
+        flash(id);
 
     } catch (error) {
 
@@ -117,12 +133,28 @@ const BookingRequests = () => {
                 style={{
                     minHeight: "100vh",
                     display: "flex",
+                    flexDirection: "column",
+                    gap: "18px",
                     justifyContent: "center",
                     alignItems: "center",
-                    fontSize: "30px"
+                    background: "#f8f5f0",
                 }}
             >
-                Loading Requests...
+                <style>{`
+                    @keyframes spin { to { transform: rotate(360deg); } }
+                    .loader-ring {
+                        width: 54px;
+                        height: 54px;
+                        border: 4px solid #e7ddcd;
+                        border-top-color: #2b1408;
+                        border-radius: 50%;
+                        animation: spin 0.8s linear infinite;
+                    }
+                `}</style>
+                <div className="loader-ring" />
+                <p style={{ fontSize: "22px", color: "#2b1408", fontFamily: "'Cormorant Garamond', serif" }}>
+                    Loading Requests...
+                </p>
             </div>
         );
     }
@@ -136,11 +168,68 @@ const BookingRequests = () => {
                 padding: "50px 8%"
             }}
         >
+            <style>{`
+                @keyframes fadeInDown {
+                    from { opacity: 0; transform: translateY(-18px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes cardIn {
+                    from { opacity: 0; transform: translateY(24px); }
+                    to { opacity: 1; transform: translateY(0); }
+                }
+                @keyframes popIn {
+                    from { opacity: 0; transform: scale(0.85); }
+                    to { opacity: 1; transform: scale(1); }
+                }
+                @keyframes flashGlow {
+                    0% { box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+                    35% { box-shadow: 0 0 0 6px rgba(22,163,74,0.18), 0 10px 25px rgba(0,0,0,0.08); }
+                    100% { box-shadow: 0 10px 25px rgba(0,0,0,0.08); }
+                }
+
+                .booking-card {
+                    transition: transform 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease;
+                }
+                .booking-card:hover {
+                    transform: translateY(-6px);
+                    box-shadow: 0 20px 38px rgba(0,0,0,0.12);
+                }
+                .booking-card.flash {
+                    animation: flashGlow 0.9s ease;
+                }
+
+                .status-badge { transition: background 0.4s ease, transform 0.3s ease; }
+
+                .action-btn {
+                    transition: transform 0.25s ease, filter 0.25s ease, box-shadow 0.25s ease;
+                }
+                .action-btn:hover {
+                    transform: translateY(-2px);
+                    filter: brightness(1.08);
+                    box-shadow: 0 10px 20px rgba(0,0,0,0.18);
+                }
+                .action-btn:active {
+                    transform: translateY(0) scale(0.96);
+                }
+
+                .status-message { animation: popIn 0.4s cubic-bezier(0.22,1,0.36,1); }
+
+                @media (prefers-reduced-motion: reduce) {
+                    *, *::before, *::after {
+                        animation-duration: 0.001ms !important;
+                        animation-iteration-count: 1 !important;
+                        transition-duration: 0.001ms !important;
+                    }
+                }
+            `}</style>
 
             {/* TITLE */}
             <div
                 style={{
-                    marginBottom: "40px"
+                    marginBottom: "40px",
+                    opacity: loaded ? 1 : 0,
+                    transform: loaded ? "translateY(0)" : "translateY(-18px)",
+                    transition: "opacity 0.55s ease, transform 0.55s ease",
                 }}
             >
 
@@ -170,11 +259,14 @@ const BookingRequests = () => {
                     <div
                         style={{
                             textAlign: "center",
-                            fontSize: "30px",
-                            marginTop: "100px"
+                            marginTop: "100px",
+                            animation: "popIn 0.5s ease",
                         }}
                     >
-                        No Booking Requests Found
+                        <div style={{ fontSize: "46px", marginBottom: "14px" }}>📭</div>
+                        <div style={{ fontSize: "26px", color: "#2b1408" }}>
+                            No Booking Requests Found
+                        </div>
                     </div>
 
                 )
@@ -188,16 +280,18 @@ const BookingRequests = () => {
             >
 
                 {
-                    requests.map((booking) => (
+                    requests.map((booking, index) => (
 
                         <div
                             key={booking.id}
+                            className={`booking-card${justUpdated === booking.id ? " flash" : ""}`}
                             style={{
                                 background: "#fff",
                                 padding: "35px",
                                 borderRadius: "25px",
                                 boxShadow:
-                                    "0 10px 25px rgba(0,0,0,0.08)"
+                                    "0 10px 25px rgba(0,0,0,0.08)",
+                                animation: `cardIn 0.55s cubic-bezier(0.22,1,0.36,1) ${Math.min(index * 0.08, 0.6)}s both`,
                             }}
                         >
 
@@ -277,6 +371,7 @@ const BookingRequests = () => {
                                 <div>
 
                                     <span
+                                        className="status-badge"
                                         style={{
                                             background:
                                                 getStatusColor(
@@ -288,7 +383,8 @@ const BookingRequests = () => {
                                             borderRadius:
                                                 "30px",
                                             fontWeight:
-                                                "600"
+                                                "600",
+                                            display: "inline-block",
                                         }}
                                     >
                                         {
@@ -319,6 +415,7 @@ const BookingRequests = () => {
                                                     booking.id
                                                 )
                                             }
+                                            className="action-btn"
                                             style={{
                                                 background: "#16a34a",
                                                 color: "#fff",
@@ -338,6 +435,7 @@ const BookingRequests = () => {
                                                     booking.id
                                                 )
                                             }
+                                            className="action-btn"
                                             style={{
                                                 background: "#dc2626",
                                                 color: "#fff",
@@ -361,6 +459,7 @@ const BookingRequests = () => {
                                     "CONFIRMED" && (
 
                                     <div
+                                        className="status-message"
                                         style={{
                                             marginTop:
                                                 "20px",
@@ -383,6 +482,7 @@ const BookingRequests = () => {
                                     "COMPLETED" && (
 
                                     <div
+                                        className="status-message"
                                         style={{
                                             marginTop:
                                                 "20px",
@@ -402,6 +502,7 @@ const BookingRequests = () => {
                                     "CANCELLED" && (
 
                                     <div
+                                        className="status-message"
                                         style={{
                                             marginTop: "20px",
                                             color: "#dc2626",

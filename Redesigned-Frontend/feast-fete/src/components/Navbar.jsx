@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import logo from "../Images/logo.jpeg";
@@ -6,10 +6,23 @@ import logo from "../Images/logo.jpeg";
 const Navbar = () => {
 
     const [menuOpen, setMenuOpen] = useState(false);
+    const [loaded, setLoaded] = useState(false);
+    const [scrolled, setScrolled] = useState(false);
 
     const navigate = useNavigate();
 
     const role = localStorage.getItem("role");
+
+    useEffect(() => {
+        const t = setTimeout(() => setLoaded(true), 50);
+        return () => clearTimeout(t);
+    }, []);
+
+    useEffect(() => {
+        const onScroll = () => setScrolled(window.scrollY > 30);
+        window.addEventListener("scroll", onScroll, { passive: true });
+        return () => window.removeEventListener("scroll", onScroll);
+    }, []);
 
     const handleLogout = () => {
 
@@ -23,14 +36,19 @@ const Navbar = () => {
         <nav
             style={{
                 width: "100%",
-                padding: "18px 5%",
+                padding: scrolled ? "10px 5%" : "18px 5%",
                 background: "rgba(26, 10, 0, 0.96)",
                 borderBottom: "1px solid rgba(212,175,55,0.15)",
                 position: "sticky",
                 top: "0",
                 zIndex: "9999",
                 backdropFilter: "blur(10px)",
-                boxSizing: "border-box"
+                boxSizing: "border-box",
+                opacity: loaded ? 1 : 0,
+                transform: loaded ? "translateY(0)" : "translateY(-16px)",
+                transition:
+                    "padding 0.35s cubic-bezier(0.22,1,0.36,1), box-shadow 0.35s ease, opacity 0.6s ease, transform 0.6s ease",
+                boxShadow: scrolled ? "0 10px 30px rgba(0,0,0,0.35)" : "none",
             }}
         >
 
@@ -45,6 +63,7 @@ const Navbar = () => {
 
                 {/* LOGO */}
                 <div
+                    className="logo-wrap"
                     style={{
                         display: "flex",
                         alignItems: "center",
@@ -53,9 +72,10 @@ const Navbar = () => {
                 >
 
                     <div
+                        className="logo-ring"
                         style={{
-                            width: "75px",
-                            height: "75px",
+                            width: scrolled ? "60px" : "75px",
+                            height: scrolled ? "60px" : "75px",
                             borderRadius: "50%",
                             background: "#1a0a00",
                             border: "2px solid #d4af37",
@@ -63,15 +83,15 @@ const Navbar = () => {
                             alignItems: "center",
                             justifyContent: "center",
                             overflow: "hidden",
-                            boxShadow: "0 0 15px rgba(212,175,55,0.4)"
+                            transition: "width 0.35s ease, height 0.35s ease, transform 0.3s ease",
                         }}
                     >
                         <img
                             src={logo}
                             alt="logo"
                             style={{
-                                width: "68px",
-                                height: "68px",
+                                width: "92%",
+                                height: "92%",
                                 objectFit: "cover",
                                 borderRadius: "50%"
                             }}
@@ -81,10 +101,10 @@ const Navbar = () => {
                     <h1
                         style={{
                             color: "#fff8ef",
-                            fontSize: "34px",
+                            fontSize: scrolled ? "26px" : "34px",
                             fontWeight: "700",
-                            fontFamily:
-                                "'Cormorant Garamond', serif"
+                            fontFamily: "'Cormorant Garamond', serif",
+                            transition: "font-size 0.35s ease",
                         }}
                     >
                         Feast & Fete
@@ -102,12 +122,13 @@ const Navbar = () => {
                     }}
                 >
 
-                    <Link to="/" style={linkStyle}>
+                    <Link to="/" className="nav-link" style={linkStyle}>
                         Home
                     </Link>
 
                     <Link
                         to="/organizers"
+                        className="nav-link"
                         style={linkStyle}
                     >
                         Organizers
@@ -119,6 +140,7 @@ const Navbar = () => {
                             <>
                                 <Link
                                     to="/login"
+                                    className="nav-link"
                                     style={linkStyle}
                                 >
                                     Login
@@ -126,6 +148,7 @@ const Navbar = () => {
 
                                 <Link
                                     to="/register"
+                                    className="nav-link"
                                     style={linkStyle}
                                 >
                                     Register
@@ -144,6 +167,7 @@ const Navbar = () => {
                                             ? "/admin/dashboard"
                                             : "/dashboard"
                                     }
+                                    className="nav-link"
                                     style={linkStyle}
                                 >
                                     Dashboard
@@ -155,6 +179,7 @@ const Navbar = () => {
 
                                         <Link
                                             to="/my-bookings"
+                                            className="nav-link"
                                             style={linkStyle}
                                         >
                                             My Bookings
@@ -168,6 +193,7 @@ const Navbar = () => {
 
                                         <Link
                                             to="/booking-requests"
+                                            className="nav-link"
                                             style={linkStyle}
                                         >
                                             Booking Requests
@@ -177,6 +203,7 @@ const Navbar = () => {
 
                                 {/* ROLE BADGE */}
                                 <span
+                                    className="role-badge"
                                     style={{
                                         color: "#d4af37",
                                         border:
@@ -194,6 +221,7 @@ const Navbar = () => {
                                 {/* LOGOUT */}
                                 <button
                                     onClick={handleLogout}
+                                    className="logout-btn"
                                     style={{
                                         background: "transparent",
                                         border:
@@ -228,130 +256,227 @@ const Navbar = () => {
                     }}
                 >
 
-                    {
-                        menuOpen
-                            ? <X size={30} />
-                            : <Menu size={30} />
-                    }
+                    <span key={menuOpen ? "open" : "closed"} className="icon-pop" style={{ display: "inline-flex" }}>
+                        {
+                            menuOpen
+                                ? <X size={30} />
+                                : <Menu size={30} />
+                        }
+                    </span>
 
                 </button>
 
             </div>
 
-            {/* MOBILE MENU */}
-            {
-                menuOpen && (
+            {/* MOBILE MENU (always mounted so it can animate open AND closed) */}
+            <div
+                className="mobile-menu"
+                style={{
+                    maxHeight: menuOpen ? "600px" : "0px",
+                    opacity: menuOpen ? 1 : 0,
+                    marginTop: menuOpen ? "20px" : "0px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "18px",
+                    background: "rgba(61,26,0,0.95)",
+                    padding: menuOpen ? "25px" : "0 25px",
+                    borderRadius: "12px",
+                    overflow: "hidden",
+                    transition:
+                        "max-height 0.45s cubic-bezier(0.22,1,0.36,1), opacity 0.35s ease, margin-top 0.4s ease, padding 0.4s ease",
+                }}
+            >
 
-                    <div
-                        style={{
-                            marginTop: "20px",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "18px",
-                            background: "rgba(61,26,0,0.95)",
-                            padding: "25px",
-                            borderRadius: "12px"
-                        }}
-                    >
+                <Link
+                    to="/"
+                    style={{
+                        ...mobileLink,
+                        opacity: menuOpen ? 1 : 0,
+                        transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                        transition: "opacity 0.4s ease 0.05s, transform 0.4s ease 0.05s",
+                    }}
+                    onClick={() => setMenuOpen(false)}
+                >
+                    Home
+                </Link>
 
-                        <Link
-                            to="/"
-                            style={mobileLink}
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            Home
-                        </Link>
+                <Link
+                    to="/organizers"
+                    style={{
+                        ...mobileLink,
+                        opacity: menuOpen ? 1 : 0,
+                        transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                        transition: "opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s",
+                    }}
+                    onClick={() => setMenuOpen(false)}
+                >
+                    Organizers
+                </Link>
 
-                        <Link
-                            to="/organizers"
-                            style={mobileLink}
-                            onClick={() => setMenuOpen(false)}
-                        >
-                            Organizers
-                        </Link>
+                {
+                    !role && (
+                        <>
+                            <Link
+                                to="/login"
+                                style={{
+                                    ...mobileLink,
+                                    opacity: menuOpen ? 1 : 0,
+                                    transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+                                }}
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Login
+                            </Link>
 
-                        {
-                            !role && (
-                                <>
+                            <Link
+                                to="/register"
+                                style={{
+                                    ...mobileLink,
+                                    opacity: menuOpen ? 1 : 0,
+                                    transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                    transition: "opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s",
+                                }}
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Register
+                            </Link>
+                        </>
+                    )
+                }
+
+                {
+                    role && (
+                        <>
+                            <Link
+                                to={
+                                    role === "ADMIN"
+                                        ? "/admin/dashboard"
+                                        : "/dashboard"
+                                }
+                                style={{
+                                    ...mobileLink,
+                                    opacity: menuOpen ? 1 : 0,
+                                    transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                    transition: "opacity 0.4s ease 0.15s, transform 0.4s ease 0.15s",
+                                }}
+                                onClick={() => setMenuOpen(false)}
+                            >
+                                Dashboard
+                            </Link>
+
+                            {
+                                role === "CUSTOMER" && (
+
                                     <Link
-                                        to="/login"
-                                        style={mobileLink}
-                                    >
-                                        Login
-                                    </Link>
-
-                                    <Link
-                                        to="/register"
-                                        style={mobileLink}
-                                    >
-                                        Register
-                                    </Link>
-                                </>
-                            )
-                        }
-
-                        {
-                            role && (
-                                <>
-                                    <Link
-                                        to={
-                                            role === "ADMIN"
-                                                ? "/admin/dashboard"
-                                                : "/dashboard"
-                                        }
-                                        style={mobileLink}
-                                    >
-                                        Dashboard
-                                    </Link>
-
-                                    {
-                                        role === "CUSTOMER" && (
-
-                                            <Link
-                                                to="/my-bookings"
-                                                style={mobileLink}
-                                            >
-                                                My Bookings
-                                            </Link>
-                                        )
-                                    }
-
-                                    {
-                                        role === "ORGANIZER" && (
-
-                                            <Link
-                                                to="/booking-requests"
-                                                style={mobileLink}
-                                            >
-                                                Booking Requests
-                                            </Link>
-                                        )
-                                    }
-
-                                    <button
-                                        onClick={handleLogout}
+                                        to="/my-bookings"
                                         style={{
-                                            background: "transparent",
-                                            border:
-                                                "1px solid rgba(212,175,55,0.3)",
-                                            color: "#d4af37",
-                                            padding: "12px",
-                                            borderRadius: "12px",
-                                            cursor: "pointer"
+                                            ...mobileLink,
+                                            opacity: menuOpen ? 1 : 0,
+                                            transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                            transition: "opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s",
                                         }}
+                                        onClick={() => setMenuOpen(false)}
                                     >
-                                        Logout
-                                    </button>
-                                </>
-                            )
-                        }
+                                        My Bookings
+                                    </Link>
+                                )
+                            }
 
-                    </div>
-                )
-            }
+                            {
+                                role === "ORGANIZER" && (
+
+                                    <Link
+                                        to="/booking-requests"
+                                        style={{
+                                            ...mobileLink,
+                                            opacity: menuOpen ? 1 : 0,
+                                            transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                            transition: "opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s",
+                                        }}
+                                        onClick={() => setMenuOpen(false)}
+                                    >
+                                        Booking Requests
+                                    </Link>
+                                )
+                            }
+
+                            <button
+                                onClick={handleLogout}
+                                className="logout-btn"
+                                style={{
+                                    background: "transparent",
+                                    border:
+                                        "1px solid rgba(212,175,55,0.3)",
+                                    color: "#d4af37",
+                                    padding: "12px",
+                                    borderRadius: "12px",
+                                    cursor: "pointer",
+                                    opacity: menuOpen ? 1 : 0,
+                                    transform: menuOpen ? "translateX(0)" : "translateX(-18px)",
+                                    transition: "opacity 0.4s ease 0.25s, transform 0.4s ease 0.25s",
+                                }}
+                            >
+                                Logout
+                            </button>
+                        </>
+                    )
+                }
+
+            </div>
 
             <style>
                 {`
+                    @keyframes ringPulse {
+                        0%, 100% { box-shadow: 0 0 12px rgba(212,175,55,0.4); }
+                        50% { box-shadow: 0 0 22px rgba(212,175,55,0.75); }
+                    }
+                    @keyframes badgePulse {
+                        0%, 100% { box-shadow: 0 0 0 0 rgba(212,175,55,0.35); }
+                        50% { box-shadow: 0 0 0 6px rgba(212,175,55,0); }
+                    }
+                    @keyframes popIn {
+                        from { opacity: 0; transform: scale(0.6) rotate(-60deg); }
+                        to { opacity: 1; transform: scale(1) rotate(0deg); }
+                    }
+
+                    .logo-ring { animation: ringPulse 3.2s ease-in-out infinite; }
+                    .logo-wrap:hover .logo-ring { transform: scale(1.06); }
+
+                    .nav-link {
+                        position: relative;
+                        transition: color 0.3s ease;
+                    }
+                    .nav-link::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        bottom: -6px;
+                        width: 0%;
+                        height: 1px;
+                        background: #d4af37;
+                        transition: width 0.3s ease;
+                    }
+                    .nav-link:hover {
+                        color: #d4af37 !important;
+                    }
+                    .nav-link:hover::after {
+                        width: 100%;
+                    }
+
+                    .role-badge { animation: badgePulse 2.6s ease-in-out infinite; }
+
+                    .logout-btn { transition: background 0.3s ease, color 0.3s ease, transform 0.3s ease; }
+                    .logout-btn:hover {
+                        background: #d4af37 !important;
+                        color: #1a0a00 !important;
+                        transform: translateY(-2px);
+                    }
+
+                    .icon-pop { animation: popIn 0.3s cubic-bezier(0.22,1,0.36,1); }
+
+                    .mobile-btn:hover { transform: scale(1.08); }
+
                     @media (max-width: 768px) {
 
                         .desktop-menu {
@@ -360,6 +485,14 @@ const Navbar = () => {
 
                         .mobile-btn {
                             display: block !important;
+                        }
+                    }
+
+                    @media (prefers-reduced-motion: reduce) {
+                        *, *::before, *::after {
+                            animation-duration: 0.001ms !important;
+                            animation-iteration-count: 1 !important;
+                            transition-duration: 0.001ms !important;
                         }
                     }
                 `}
