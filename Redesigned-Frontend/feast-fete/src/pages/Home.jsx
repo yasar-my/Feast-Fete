@@ -1,12 +1,5 @@
 import { Link } from "react-router-dom";
 
-import WeddingImg from "../assets/Wedding.jpg";
-import BirthdayImg from "../assets/Birthday.jpg";
-import BuffetImg from "../assets/Buffet.jpg";
-import CorporateImg from "../assets/Corporate.jpg";
-import OutdoorImg from "../assets/Outdoor.jpg";
-import PrivateImg from "../assets/Private.jpg";
-
 const Home = () => {
 
     return (
@@ -323,27 +316,27 @@ const Home = () => {
                 {[
                     {
                         title: "Wedding Catering",
-                        img: "../assets/Wedding.jpg",
+                        img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200",
                     },
                     {
                         title: "Corporate Events",
-                        img:{CorporateImg},
+                        img: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200",
                     },
                     {
                         title: "Private Parties",
-                        img: {PrivateImg},
+                        img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200",
                     },
                     {
                         title: "Birthday Events",
-                        img: {BirthdayImg},
+                        img: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=1200",
                     },
                     {
                         title: "Outdoor Catering",
-                        img: {OutdoorImg},
+                        img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200",
                     },
                     {
                         title: "Buffet Services",
-                        img: {BuffetImg},
+                        img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200",
                     }
                     ].map((service, index) => (
                 <div
