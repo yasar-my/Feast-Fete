@@ -274,89 +274,202 @@ const Home = () => {
 
             <section
                 style={{
-                    padding: "80px 20px",
-                    background: "#fff",
+                padding:"100px 20px",
+                background:"#fff"
                 }}
                 >
                 <div
-                    style={{
-                    maxWidth: "1300px",
-                    margin: "auto",
-                    }}
+                style={{
+                maxWidth:"1200px",
+                margin:"auto",
+                display:"grid",
+                gridTemplateColumns:"repeat(auto-fit,minmax(350px,1fr))",
+                gap:"50px",
+                alignItems:"center"
+                }}
                 >
-                    <h2
-                    style={{
-                        textAlign: "center",
-                        fontSize: "clamp(2rem,5vw,4rem)",
-                        color: "#2b1408",
-                        marginBottom: "50px",
-                    }}
-                    >
-                    Our Premium Services
-                    </h2>
 
-                    <div
-                    style={{
-                        display: "grid",
-                        gridTemplateColumns: "repeat(auto-fit,minmax(280px,1fr))",
-                        gap: "30px",
-                    }}
-                    >
-                    {[
-                        {
-                        title: "Wedding Catering",
-                        image:
-                            "https://images.unsplash.com/photo-1519167758481-83f29c1bdf8",
-                        },
-                        {
-                        title: "Corporate Events",
-                        image:
-                            "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-                        },
-                        {
-                        title: "Private Parties",
-                        image:
-                            "https://images.unsplash.com/photo-1555244162-803834f70033",
-                        },
-                    ].map((item, index) => (
-                        <div
-                        key={index}
-                        style={{
-                            background: "#fff",
-                            borderRadius: "20px",
-                            overflow: "hidden",
-                            boxShadow: "0 10px 30px rgba(0,0,0,.1)",
-                        }}
-                        >
-                        <img
-                            src={item.image}
-                            alt=""
-                            style={{
-                            width: "100%",
-                            height: "250px",
-                            objectFit: "cover",
-                            }}
-                        />
+                <img
+                src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0"
+                alt=""
+                style={{
+                width:"100%",
+                borderRadius:"20px"
+                }}
+                />
 
-                        <div style={{ padding: "20px" }}>
-                            <h3
-                            style={{
-                                color: "#2b1408",
-                                marginBottom: "10px",
-                            }}
-                            >
-                            {item.title}
-                            </h3>
+                <div>
+                <h2
+                style={{
+                fontSize:"clamp(2rem,5vw,4rem)",
+                color:"#2b1408"
+                }}
+                >
+                About Feast & Fete
+                </h2>
 
-                            <p style={{ color: "#666" }}>
-                            Premium catering experience for all occasions.
-                            </p>
-                        </div>
-                        </div>
-                    ))}
-                    </div>
+                <p
+                style={{
+                fontSize:"18px",
+                lineHeight:"1.8",
+                color:"#666"
+                }}
+                >
+                We specialize in luxury catering services for weddings,
+                corporate gatherings, birthdays and exclusive celebrations.
+                Our passion is creating unforgettable dining experiences.
+                </p>
                 </div>
+
+                </div>
+            </section>
+
+            <section
+                style={{
+                padding:"100px 20px",
+                background:"#f8f5f0"
+                }}
+                >
+
+                <h2
+                style={{
+                textAlign:"center",
+                fontSize:"50px",
+                marginBottom:"60px"
+                }}
+                >
+                How We Work
+                </h2>
+
+                <div
+                style={{
+                display:"grid",
+                gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
+                gap:"30px",
+                maxWidth:"1200px",
+                margin:"auto"
+                }}
+                >
+
+                <div>
+                <h3>1️⃣ Consultation</h3>
+                <p>Discuss event requirements.</p>
+                </div>
+
+                <div>
+                <h3>2️⃣ Menu Planning</h3>
+                <p>Create custom menu.</p>
+                </div>
+
+                <div>
+                <h3>3️⃣ Event Execution</h3>
+                <p>Professional catering service.</p>
+                </div>
+
+                <div>
+                <h3>4️⃣ Guest Satisfaction</h3>
+                <p>Memorable dining experience.</p>
+                </div>
+
+                </div>
+
                 </section>
+                <section
+                style={{
+                padding:"100px 20px",
+                background:"#fff"
+                }}
+                >
+
+                <h2
+                style={{
+                textAlign:"center",
+                fontSize:"50px",
+                marginBottom:"60px"
+                }}
+                >
+                Our Menu
+                </h2>
+
+                <div
+                style={{
+                display:"grid",
+                gridTemplateColumns:"repeat(auto-fit,minmax(250px,1fr))",
+                gap:"30px"
+                }}
+                >
+
+                <div>🥗 Veg Menu</div>
+                <div>🍗 Non-Veg Menu</div>
+                <div>🍰 Desserts</div>
+                <div>🥤 Beverages</div>
+
+                </div>
+
+                </section>
+                <section
+                style={{
+                padding:"100px 20px",
+                background:"#f8f5f0"
+                }}
+                >
+
+                <h2
+                style={{
+                textAlign:"center",
+                fontSize:"50px",
+                marginBottom:"50px"
+                }}
+                >
+                Frequently Asked Questions
+                </h2>
+
+                <div
+                style={{
+                maxWidth:"900px",
+                margin:"auto"
+                }}
+                >
+
+                <details>
+                <summary>Do you provide wedding catering?</summary>
+                <p>Yes, we specialize in luxury wedding catering.</p>
+                </details>
+
+                <details>
+                <summary>Can menus be customized?</summary>
+                <p>Yes, all menus can be customized.</p>
+                </details>
+
+                <details>
+                <summary>Do you serve corporate events?</summary>
+                <p>Yes, we cater all corporate functions.</p>
+                </details>
+
+                </div>
+
+                </section>
+                <footer
+                style={{
+                background:"#2b1408",
+                color:"#fff",
+                padding:"60px 20px",
+                textAlign:"center"
+                }}
+                >
+
+                <h2>Feast & Fete</h2>
+
+                <p>
+                Luxury Catering Services For Every Occasion
+                </p>
+
+                <p style={{marginTop:"20px"}}>
+                © 2026 Feast & Fete. All Rights Reserved.
+                </p>
+
+                </footer>
+
 
             
 
