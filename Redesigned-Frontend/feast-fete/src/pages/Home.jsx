@@ -323,7 +323,7 @@ const Home = () => {
                 {[
                     {
                         title: "Wedding Catering",
-                        img: {WeddingImg},
+                        img: "../assets/Wedding.jpg",
                     },
                     {
                         title: "Corporate Events",
