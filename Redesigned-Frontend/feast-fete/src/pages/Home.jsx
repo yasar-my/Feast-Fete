@@ -282,38 +282,63 @@ const Home = () => {
             >
             <h2
                 style={{
-                textAlign: "center",
-                fontSize: "clamp(2rem,5vw,3.5rem)",
-                color: "#2b1408",
-                marginBottom: "50px",
+                    textAlign: "center",
+                    fontSize: "clamp(2.5rem,5vw,4.5rem)",
+                    color: "#2b1408",
+                    marginBottom: "15px",
                 }}
-            >
+                >
                 Our Premium Services
-            </h2>
+                </h2>
+
+                <p
+                style={{
+                    textAlign: "center",
+                    color: "#666",
+                    fontSize: "20px",
+                    maxWidth: "700px",
+                    margin: "0 auto 70px",
+                }}
+                >
+                We provide luxury catering solutions for weddings,
+                corporate events, birthday celebrations and private gatherings.
+                </p>
 
             <div
                 style={{
                 maxWidth: "1200px",
                 margin: "auto",
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+                gridTemplateColumns: "repeat(auto-fit,minmax(320px,1fr))",
                 gap: "30px",
                 }}
             >
                 {[
-                {
-                    title: "Wedding Catering",
-                    img: "https://images.unsplash.com/photo-1519167758481-83f29c1bdf8",
-                },
-                {
-                    title: "Corporate Events",
-                    img: "https://images.unsplash.com/photo-1517457373958-b7bdd4587205",
-                },
-                {
-                    title: "Private Parties",
-                    img: "https://images.unsplash.com/photo-1555244162-803834f70033",
-                },
-                ].map((service, index) => (
+                    {
+                        title: "Wedding Catering",
+                        img: "https://images.unsplash.com/photo-1519741497674-611481863552?w=1200",
+                    },
+                    {
+                        title: "Corporate Events",
+                        img: "https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200",
+                    },
+                    {
+                        title: "Private Parties",
+                        img: "https://images.unsplash.com/photo-1555244162-803834f70033?w=1200",
+                    },
+                    {
+                        title: "Birthday Events",
+                        img: "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=1200",
+                    },
+                    {
+                        title: "Outdoor Catering",
+                        img: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1200",
+                    },
+                    {
+                        title: "Buffet Services",
+                        img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=1200",
+                    }
+                    ].map((service, index) => (
                 <div
                     key={index}
                     style={{
